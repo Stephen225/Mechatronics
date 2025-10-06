@@ -20,6 +20,17 @@ pwm8 = gpio.PWM(outputs[7], 500) #change this to make all the pwms
 pwm9 = gpio.PWM(outputs[8], 500) #change this to make all the pwms
 pwm10 = gpio.PWM(outputs[9], 500) #change this to make all the pwms
 
+pwm1.start(0)
+pwm2.start(0)
+pwm3.start(0)
+pwm4.start(0)
+pwm5.start(0)
+pwm6.start(0)
+pwm7.start(0)
+pwm8.start(0)
+pwm9.start(0)
+pwm10.start(0)
+
 def brightness (t, phase):
 	f = 0.2
 	B = (math.sin(2*math.pi()*f*t - phase))^2
