@@ -42,13 +42,15 @@ flip = 0
 time_ref = 0
 time = 0
 def flipflop():
-	time_ref = time
+	global time_ref = time
+	global flip
 	if flip==0:
 		flip = 1
 	else:
 		flip = 0
 
 def do_shit(flop):
+	global time
 	if flip==0:
 		time = time_ref - time.time()
 	else:
