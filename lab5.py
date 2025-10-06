@@ -4,7 +4,7 @@ import RPi.GPIO as gpio
 
 gpio.setmode(gpio.BCM)
 in_pin = 21 #chage that
-gpio.setup(in_pin, gpio.IN, pull_up_down = PUD_DOWN)
+gpio.setup(in_pin, gpio.IN, pull_up_down = gpio.PUD_DOWN)
 
 outputs = [17, 27, 22, 23, 24, 25, 19, 26, 16, 20] #list of output pins
 for i in outputs:
