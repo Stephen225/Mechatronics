@@ -42,7 +42,8 @@ flip = 0
 time_ref = 0
 time = 0
 def flipflop():
-	global time_ref = time
+	global time_ref
+	time_ref = time
 	global flip
 	if flip==0:
 		flip = 1
