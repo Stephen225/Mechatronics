@@ -43,7 +43,7 @@ time_ref = 0
 time = 0
 def flipflop():
 	time_ref = time
-	if flip:
+	if flip==True:
 		flip = False
 	else:
 		flip = True
