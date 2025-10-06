@@ -33,11 +33,11 @@ pwm10.start(0)
 
 def brightness (t, phase):
 	f = 0.2
-	B = (math.sin(2*math.pi()*f*t - phase))^2
-	return B
+	B = (math.sin(2*math.pi*f*t - phase))**2
+	return B*100
 
 def set_brights(t):
-	phi = math.pi()/11
+	phi = math.pi11
 	pwm1.ChangeDutyCycle(brightness(t, phi*0)) #may have to hardcode
 	pwm2.ChangeDutyCycle(brightness(t, phi*1)) #may have to hardcode
 	pwm3.ChangeDutyCycle(brightness(t, phi*2)) #may have to hardcode
@@ -51,10 +51,10 @@ def set_brights(t):
 
 flip = 0
 time_ref = 0
-time = 0
-def flipflop():
+fake_time = 0
+def flipflop(channel):
 	global time_ref
-	time_ref = time
+	time_ref = fake_time
 	global flip
 	if flip==0:
 		flip = 1
@@ -62,17 +62,17 @@ def flipflop():
 		flip = 0
 
 def do_shit(flop):
-	global time
+	global fake_time
 	if flip==0:
-		time = time_ref - time.time()
+		fake_time = time_ref - time.time()
 	else:
-		time = time_ref + time.time()
+		fake_time = time_ref + time.time()
 	set_brights(time)
 
-gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop(), bouncetime = 1)
+gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop, bouncetime = 1)
 
 try:
 	while 1:
 		do_shit(flip)
-except:
+except KeyboardInterrupt:
 	gpio.cleanup()
