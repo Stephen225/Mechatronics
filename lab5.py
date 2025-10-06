@@ -38,18 +38,18 @@ def set_brights(t):
 	pwm9.ChangeDutyCycle(brightness(t, phi*8)) #may have to hardcode
 	pwm10.ChangeDutyCycle(brightness(t, phi*9)) #may have to hardcode
 
-flip = True
+flip = 0
 time_ref = 0
 time = 0
 def flipflop():
 	time_ref = time
-	if flip==True:
-		flip = False
+	if flip==0:
+		flip = 1
 	else:
-		flip = True
+		flip = 0
 
 def do_shit(flop):
-	if flip:
+	if flip==0:
 		time = time_ref - time.time()
 	else:
 		time = time_ref + time.time()
