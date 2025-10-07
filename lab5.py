@@ -21,7 +21,7 @@ def brightness(t, phase):
 	return B*100
 
 def set_brights(t):
-	phi = math.pi*11
+	phi = math.pi/11
 	for n, thing in enumerate(pwms):
 		thing.ChangeDutyCycle(brightness(t, phi*n))
 
