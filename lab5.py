@@ -49,7 +49,6 @@ def do_shit(flop):
 	i_hate_this = time.time()
 	fake_time += flip*delta_time
 	set_brights(fake_time)
-	print(fake_time)
 
 gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop, bouncetime = 500)
 
