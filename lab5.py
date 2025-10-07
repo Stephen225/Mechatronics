@@ -37,7 +37,7 @@ def brightness (t, phase):
 	return B*100
 
 def set_brights(t):
-	phi = math.pi11
+	phi = math.pi*11
 	pwm1.ChangeDutyCycle(brightness(t, phi*0)) #may have to hardcode
 	pwm2.ChangeDutyCycle(brightness(t, phi*1)) #may have to hardcode
 	pwm3.ChangeDutyCycle(brightness(t, phi*2)) #may have to hardcode
