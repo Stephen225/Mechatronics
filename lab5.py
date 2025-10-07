@@ -25,31 +25,34 @@ def set_brights(t):
 	for n, thing in enumerate(pwms):
 		thing.ChangeDutyCycle(brightness(t, phi*n))
 
-flip = 0
+flip = 1 #forward
 time_ref = 0
 fake_time = 0
-more_fake_time = 0
+delta_time = 0
+i_hate_this = 0
 start_time = time.time()
 def flipflop(channel):
 	global time_ref
+	global i_hate_this
 	time_ref = fake_time
 	global flip
 	if flip==0:
-		flip = 1
+		flip = 1 #go forwards
 	else:
-		flip = 0
+		flip = 0 #go backwards
+		i_hate_this = delta_time #i love placeholder variables
 
 def do_shit(flop):
 	global fake_time
-	more_fake_time = time.time()-start_time
+	delta_time = time.time()-start_time - i_hate_this
 	if flip==0:
-		fake_time = time_ref - more_fake_time
+		fake_time = time_ref - delta_time
 	else:
-		fake_time = time_ref + more_fake_time
+		fake_time = time_ref + delta_time
 	set_brights(fake_time)
-	#print(fake_time)
+	print(fake_time)
 
-gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop, bouncetime = 100)
+gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop, bouncetime = 500)
 
 try:
 	while 1:
