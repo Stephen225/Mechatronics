@@ -68,6 +68,7 @@ def do_shit(flop):
 	else:
 		fake_time = time_ref + time.time()
 	set_brights(fake_time)
+	print(fake_time)
 
 gpio.add_event_detect(in_pin, gpio.RISING, callback = flipflop, bouncetime = 1)
 
