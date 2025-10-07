@@ -44,6 +44,7 @@ def flipflop(channel):
 
 def do_shit(flop):
 	global fake_time
+	global i_hate_this
 	delta_time = time.time() - i_hate_this#-start_time - i_hate_this
 	i_hate_this = time.time()
 	fake_time += flip*delta_time
