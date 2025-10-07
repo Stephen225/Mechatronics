@@ -52,6 +52,8 @@ def set_brights(t):
 flip = 0
 time_ref = 0
 fake_time = 0
+more_fake_time = 0
+start_time = time.time()
 def flipflop(channel):
 	global time_ref
 	time_ref = fake_time
@@ -63,10 +65,11 @@ def flipflop(channel):
 
 def do_shit(flop):
 	global fake_time
+	more_fake_time = time.time()-start_time
 	if flip==0:
-		fake_time = time_ref - time.time()
+		fake_time = time_ref - more_fake_time
 	else:
-		fake_time = time_ref + time.time()
+		fake_time = time_ref + more_fake_time
 	set_brights(fake_time)
 	print(fake_time)
 
