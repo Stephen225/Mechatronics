@@ -32,23 +32,21 @@ delta_time = 0
 i_hate_this = 0
 start_time = time.time()
 def flipflop(channel):
-	global time_ref
-	global i_hate_this
-	time_ref = fake_time
+	#global time_ref
+	#global i_hate_this
+	#time_ref = fake_time
 	global flip
-	if flip==0:
+	if flip==-1:
 		flip = 1 #go forwards
 	else:
-		flip = 0 #go backwards
-		i_hate_this = delta_time #i love placeholder variables
+		flip = -1 #go backwards
+		#i_hate_this = delta_time #i love placeholder variables
 
 def do_shit(flop):
 	global fake_time
-	delta_time = time.time()-start_time - i_hate_this
-	if flip==0:
-		fake_time = time_ref - delta_time
-	else:
-		fake_time = time_ref + delta_time
+	delta_time = time.time() - i_hate_this#-start_time - i_hate_this
+	i_hate_this = time.time()
+	fake_time += flip*delta_time
 	set_brights(fake_time)
 	print(fake_time)
 
