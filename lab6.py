@@ -13,13 +13,13 @@ GPIO.setup(clockPin, GPIO.OUT, initial = 0)
 shifter = Shifter(serialPin, latchPin, clockPin)
 
 bugs = [2**i for i in range(8)]
-bugIndex = rand.randint(8)
+bugIndex = rand.randint(0,7)
 
 try:
 	while 1:
 		shifter.shiftByte(bugs[bugIndex])
 		time.sleep(0.05)
-		if rand.randint(1) == 1:
+		if rand.randint(0,1) == 1:
 			bugIndex += 1
 		else:
 			bugIndex -= 1
