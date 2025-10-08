@@ -4,11 +4,10 @@ import time
 class Shifter:
 	def __init__(self, a, b, c):
 		self.serialPin, self.latchPin, self.clockPin = a, b, c
-	
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(dataPin, GPIO.OUT)
-	GPIO.setup(latchPin, GPIO.OUT, initial = 0)
-	GPIO.setup(clockPin, GPIO.OUT, initial = 0)
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(self.dataPin, GPIO.OUT)
+		GPIO.setup(self.latchPin, GPIO.OUT, initial = 0)
+		GPIO.setup(self.clockPin, GPIO.OUT, initial = 0)
 
 	def __ping(self, pin):
 		GPIO.output(pin, 1)
