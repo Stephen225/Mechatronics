@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import random as rand
 
 class Shifter:
 	def __init__(self, a=23, b=24, c=25):
