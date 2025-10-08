@@ -21,7 +21,9 @@ try:
 		time.sleep(0.05)
 		if rand.randint(0,1) == 1:
 			bugIndex += 1
+			if bugIndex == 8: bugIndex = 6
 		else:
 			bugIndex -= 1
+			if bugIndex == -1: bugIndex = 2
 except KeyboardInterrupt:
 	GPIO.cleanup()
