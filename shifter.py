@@ -18,4 +18,5 @@ class Shifter:
 		for i in range(8):
 			GPIO.output(self.serialPin, byte & (1<<i))
 			__ping(self.clockPin)
+			print(byte & (1<<i))
 		__ping(self.latchPin)

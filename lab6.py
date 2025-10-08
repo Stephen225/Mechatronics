@@ -8,6 +8,8 @@ shifter = Shifter(serialPin, latchPin, clockPin)
 
 try:
 	while 1:
+		print("go")
 		shifter.shiftByte(0b10101010)
+		print("done")
 except:
 	GPIO.cleanup()
