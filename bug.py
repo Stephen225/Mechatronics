@@ -42,7 +42,7 @@ def fastOff():
 	boog.timestep = 0.1
 
 
-GPIO.add_event_detect(go, GPIO.RISING, callback = bugGO, bouncetime = 50)
+GPIO.add_event_detect(go, GPIO.RISING, callback = bugGo, bouncetime = 50)
 GPIO.add_event_detect(wrap, GPIO.RISING, callback = wrapFlip, bouncetime = 50)
 GPIO.add_event_detect(fast, GPIO.RISING, callback = fastOn, bouncetime = 50)
 GPIO.add_event_detect(fast, GPIO.FALLING, callback = fastOff, bouncetime = 50)
