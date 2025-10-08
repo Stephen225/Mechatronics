@@ -28,7 +28,7 @@ class Bug:
 	def start(self):
 		try:
 			while 1:
-				self.__shifter.shiftByte(bugs[bugIndex])
+				self.__shifter.shiftByte(self.bugs[self.bugIndex])
 				time.sleep(0.05)
 				if rand.randint(0,1) == 1:
 					self.bugIndex += 1
