@@ -1,27 +1,22 @@
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BCM)
+class Shifter:
+	def __init__(self, a, b, c):
+		self.serialPin, self.latchPin, self.clockPin = a, b, c
+	
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(dataPin, GPIO.OUT)
+	GPIO.setup(latchPin, GPIO.OUT, initial = 0)
+	GPIO.setup(clockPin, GPIO.OUT, initial = 0)
 
-dataPin, latchPin, clockPin = 23, 24, 25
+	def __ping(self, pin):
+		GPIO.output(pin, 1)
+		time.sleep(0)
+		GPIO.output(pin, 0)
 
-GPIO.setup(dataPin, GPIO.OUT)
-GPIO.setup(latchPin, GPIO.OUT, initial = 0)
-GPIO.setup(clockPin, GPIO.OUT, initial = 0)
-
-pattern = 0b01100110
-
-for i in range(8):
-	GPIO.output(dataPin, pattern & (1<<i))
-	GPIO.output(clockPin, 1)
-	time.sleep(0)
-	GPIO.output(clockPin, 0)
-
-GPIO.output(latchPin, 1)
-time.sleep(0)
-GPIO.output(latchPin, 0)
-
-try:
-	while 1: pass
-except:
-	GPIO.cleaup()
+	def shiftByte(self, byte):
+		for i in range(8):
+			GPIO.output(self.serialPin, byte & (1<<i))
+			__ping(self.clockPin)
+		__ping(self.latchPin)
