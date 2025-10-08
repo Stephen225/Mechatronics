@@ -1,6 +1,7 @@
 from shifter import Shifter
 import time
 import RPi.GPIO as GPIO
+import random as rand
 
 serialPin, latchPin, clockPin = 23, 24, 25
 
@@ -11,12 +12,16 @@ GPIO.setup(clockPin, GPIO.OUT, initial = 0)
 
 shifter = Shifter(serialPin, latchPin, clockPin)
 
+bugs = [2**i for i in range(8)]
+bugIndex = rand.randint(8)
+
 try:
 	while 1:
-		print("go")
-		shifter.shiftByte(0b10101010)
-		time.sleep(0.5)
-		shifter.shiftByte(0b01010101)
-		time.sleep(0.5)
+		shifter.shiftByte(bugs[bugIndex])
+		time.sleep(0.05)
+		if rand.randint(1) == 1:
+			bugIndex += 1
+		else:
+			bugIndex -= 1
 except KeyboardInterrupt:
 	GPIO.cleanup()
