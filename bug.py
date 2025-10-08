@@ -1,6 +1,7 @@
 from shifter import Shifter, Bug
 import RPi.GPIO as GPIO
 import time
+import random as rand
 
 serialPin, latchPin, clockPin = 23, 24, 25
 
