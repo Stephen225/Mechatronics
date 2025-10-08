@@ -15,6 +15,8 @@ try:
 	while 1:
 		print("go")
 		shifter.shiftByte(0b10101010)
-		print("done")
+		time.sleep(0.5)
+		shifter.shiftByte(0b01010101)
+		time.sleep(0.5)
 except:
 	GPIO.cleanup()
