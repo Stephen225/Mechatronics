@@ -27,27 +27,26 @@ class Bug:
 
 	def start(self):
 		self.go = True
+		try:
+			while self.go:
+				self.__shifter.shiftByte(self.bugs[self.bugIndex])
+				time.sleep(self.timestep)
+				if rand.randint(0,1) == 1:
+					self.bugIndex += 1
+					if self.bugIndex == 8: 
+						if not self.isWrapOn:
+							self.bugIndex = 6
+						else:
+							self.bugIndex = 0
+				else:
+					self.bugIndex -= 1
+					if self.bugIndex == -1: 
+						if not self.isWrapOn:
+							self.bugIndex = 2
+						else:
+							self.bugIndex = 8
+		except KeyboardInterrupt:
+			GPIO.cleanup()
 
 	def stop(self):
 		self.go = False
-
-	try:
-		while self.go:
-			self.__shifter.shiftByte(self.bugs[self.bugIndex])
-			time.sleep(self.timestep)
-			if rand.randint(0,1) == 1:
-				self.bugIndex += 1
-				if self.bugIndex == 8: 
-					if not self.isWrapOn:
-						self.bugIndex = 6
-					else:
-						self.bugIndex = 0
-			else:
-				self.bugIndex -= 1
-				if self.bugIndex == -1: 
-					if not self.isWrapOn:
-						self.bugIndex = 2
-					else:
-						self.bugIndex = 8
-	except KeyboardInterrupt:
-		GPIO.cleanup()
