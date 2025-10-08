@@ -23,18 +23,27 @@ class Bug:
 		self.__shifter = Shifter()
 		self.bugs = [2**i for i in range(8)]
 		self.bugIndex = rand.randint(0,7)
+		self.go = True
 
 
 	def start(self):
 		try:
-			while 1:
+			while self.go:
 				self.__shifter.shiftByte(self.bugs[self.bugIndex])
-				time.sleep(0.05)
+				time.sleep(self.timestep)
 				if rand.randint(0,1) == 1:
 					self.bugIndex += 1
-					if self.bugIndex == 8: self.bugIndex = 6
+					if self.bugIndex == 8: 
+						if not self.isWrapOn:
+							self.bugIndex = 6
+						else:
+							self.bugIndex = 0
 				else:
 					self.bugIndex -= 1
-					if self.bugIndex == -1: self.bugIndex = 2
+					if self.bugIndex == -1: 
+						if not self.isWrapOn:
+							self.bugIndex = 2
+						else:
+							self.bugIndex = 8
 		except KeyboardInterrupt:
 			GPIO.cleanup()
