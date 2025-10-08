@@ -18,5 +18,5 @@ try:
 		time.sleep(0.5)
 		shifter.shiftByte(0b01010101)
 		time.sleep(0.5)
-except:
+except KeyboardInterrupt:
 	GPIO.cleanup()
