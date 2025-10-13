@@ -59,7 +59,7 @@ GPIO.add_event_detect(fast, GPIO.RISING, callback = fastOn, bouncetime = 50)
 
 try:
 	while 1:
-		pass
+		boog.doBugStuff()
 except KeyboardInterrupt:
 	GPIO.cleanup()
 #boog.start()

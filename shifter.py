@@ -27,6 +27,11 @@ class Bug:
 
 	def start(self):
 		self.go = True
+
+	def stop(self):
+		self.go = False
+
+	def doBugStuff(self):
 		while self.go:
 				self.__shifter.shiftByte(self.bugs[self.bugIndex])
 				time.sleep(self.timestep)
@@ -44,7 +49,4 @@ class Bug:
 							self.bugIndex = 2
 						else:
 							self.bugIndex = 7
-
-	def stop(self):
-		self.go = False
 
