@@ -23,6 +23,7 @@ class Bug:
 		self.__shifter = Shifter()
 		self.bugs = [2**i for i in range(8)]
 		self.bugIndex = rand.randint(0,7)
+		self.go = False
 
 
 	def start(self):
