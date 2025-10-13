@@ -43,7 +43,7 @@ class Bug:
 						if not self.isWrapOn:
 							self.bugIndex = 2
 						else:
-							self.bugIndex = 8
+							self.bugIndex = 7
 
 	def stop(self):
 		self.go = False
