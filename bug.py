@@ -18,7 +18,7 @@ GPIO.setup(fast, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 boog = Bug()
 
 doIGo = True
-def bugGo():
+def bugGo(channel):
 	global doIGo
 	if doIGo:
 		boog.start()
@@ -27,18 +27,18 @@ def bugGo():
 		boog.stop()
 		doIGo = not doIGo
 
-def bugNoGO():
+def bugNoGO(channel):
 	boog.stop()
 
 doIWrap = True
-def wrapFlip():
+def wrapFlip(channel):
 	global doIWrap
 	boog.isWrapOn = doIWrap
 	doIWrap = not doIWrap
 
 bugSpeed = 0.1
 doIFast = False
-def fastOn():
+def fastOn(channel):
 	global doIFast
 	if doIFast:
 		boog.timestep = bugSpeed/3
@@ -47,7 +47,7 @@ def fastOn():
 		boog.timestep = bugSpeed
 		doIFast = not doIFast
 
-def fastOff():
+def fastOff(channel):
 	boog.timestep = 0.1
 
 
