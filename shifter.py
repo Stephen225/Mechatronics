@@ -33,7 +33,7 @@ class Bug:
 		self.go = False
 
 	def doBugStuff(self):
-		while self.go:
+		if self.go:
 				self.__shifter.shiftByte(self.bugs[self.bugIndex])
 				time.sleep(self.timestep)
 				if rand.randint(0,1) == 1:
