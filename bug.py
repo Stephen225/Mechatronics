@@ -57,5 +57,9 @@ GPIO.add_event_detect(fast, GPIO.RISING, callback = fastOn, bouncetime = 50)
 #GPIO.add_event_detect(fast, GPIO.FALLING, callback = fastOff, bouncetime = 50)
 
 
-
+try:
+	while 1:
+		pass
+except KeyboardInterrupt:
+	GPIO.cleanup()
 #boog.start()
