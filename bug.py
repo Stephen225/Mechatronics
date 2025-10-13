@@ -22,8 +22,10 @@ def bugGo():
 	global doIGo
 	if doIGo:
 		boog.start()
+		doIGo = not doIGo
 	else:
 		boog.stop()
+		doIGo = not doIGo
 
 def bugNoGO():
 	boog.stop()
@@ -34,9 +36,16 @@ def wrapFlip():
 	boog.isWrapOn = doIWrap
 	doIWrap = not doIWrap
 
-#bugSpeed = 0.1
+bugSpeed = 0.1
+doIFast = False
 def fastOn():
-	boog.timestep = 0.1/3
+	global doIFast
+	if doIFast:
+		boog.timestep = bugSpeed/3
+		doIFast = not doIFast
+	else:
+		boog.timestep = bugSpeed
+		doIFast = not doIFast
 
 def fastOff():
 	boog.timestep = 0.1
@@ -45,7 +54,7 @@ def fastOff():
 GPIO.add_event_detect(go, GPIO.RISING, callback = bugGo, bouncetime = 50)
 GPIO.add_event_detect(wrap, GPIO.RISING, callback = wrapFlip, bouncetime = 50)
 GPIO.add_event_detect(fast, GPIO.RISING, callback = fastOn, bouncetime = 50)
-GPIO.add_event_detect(fast, GPIO.FALLING, callback = fastOff, bouncetime = 50)
+#GPIO.add_event_detect(fast, GPIO.FALLING, callback = fastOff, bouncetime = 50)
 
 
 
