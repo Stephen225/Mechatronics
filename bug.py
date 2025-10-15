@@ -48,7 +48,7 @@ def fastOn(channel):
 		doIFast = not doIFast
 
 def fastOff(channel):
-	boog.timestep = 0.1
+	boog.timestep = bugSpeed*3
 
 
 GPIO.add_event_detect(go, GPIO.RISING, callback = bugGo, bouncetime = 50)
