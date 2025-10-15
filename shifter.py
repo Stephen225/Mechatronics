@@ -36,7 +36,7 @@ class Bug:
 	def doBugStuff(self):
 		if self.go:
 				pattern = 0
-				for thing in set(self.bugs[self.bugIndex(i)] for i in range(len(self.bugIndex)))
+				for thing in set(self.bugs[self.bugIndex(i)] for i in range(len(self.bugIndex))):
 					pattern += thing
 				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
