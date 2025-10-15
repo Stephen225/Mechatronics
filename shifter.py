@@ -36,23 +36,23 @@ class Bug:
 	def doBugStuff(self):
 		if self.go:
 				pattern = 0
-				for thing in set(self.bugs[self.bugIndex(i)] for i in range(len(self.bugIndex))):
+				for thing in set(self.bugs[self.bugIndex[i]] for i in range(len(self.bugIndex))):
 					pattern += thing
 				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
 				for i in self.bugIndex:
 					if rand.randint(0,1) == 1:
-						self.bugIndex(i) += 1
-						if self.bugIndex(i) == 8: 
+						self.bugIndex[i] += 1
+						if self.bugIndex[i] == 8: 
 							if not self.isWrapOn:
-								self.bugIndex(i) = 6
+								self.bugIndex[i] = 6
 							else:
-								self.bugIndex(i) = 0
+								self.bugIndex[i] = 0
 					else:
-						self.bugIndex(i) -= 1
-						if self.bugIndex(i) == -1: 
+						self.bugIndex[i] -= 1
+						if self.bugIndex[i] == -1: 
 							if not self.isWrapOn:
-								self.bugIndex(i) = 2
+								self.bugIndex[i] = 2
 							else:
-								self.bugIndex(i) = 7
+								self.bugIndex[i] = 7
 
