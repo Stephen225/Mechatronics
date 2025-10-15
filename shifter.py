@@ -20,11 +20,10 @@ class Shifter:
 		self.__ping(self.latchPin)
 
 class Bug:
-	def __init__(self, timestep = 0.1, x = 3, isWrapOn = False, bugs = 1):
-		self.timestep, self.x, self.isWrapOn = timestep, x, isWrapOn
+	def __init__(self, timestep = 0.1, x = 3, isWrapOn = False, bugs = 1, inverse = False):
+		self.timestep, self.x, self.isWrapOn, self.numBugs, self.inverted = timestep, x, isWrapOn, bugs, inverse
 		self.__shifter = Shifter()
 		self.bugs = [2**i for i in range(8)]
-		self.numBugs = bugs
 		self.bugIndex = [rand.randint(0,7) for i in range(self.numBugs)]
 		self.go = False
 
@@ -40,11 +39,17 @@ class Bug:
 
 	def doBugStuff(self):
 		if self.go:
-				pattern = 2**8-1
+				if self.inverted:
+					pattern = 2**8-1
+				else:
+					pattern = 0
 				for thing in set(self.bugs[self.bugIndex[i]] for i in range(len(self.bugIndex))):
 					#this gets the set of unique bug index values (bugs can occupy the same space)
 					#and then you just add them together and that gives the bug positions
-					pattern -= thing
+					if self.inverted:
+						pattern -= thing
+					else:
+						pattern += thing
 				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
 				for i in range(len(self.bugIndex)):
