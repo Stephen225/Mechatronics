@@ -18,11 +18,12 @@ class Shifter:
 		self.__ping(self.latchPin)
 
 class Bug:
-	def __init__(self, timestep = 0.1, x = 3, isWrapOn = False):
+	def __init__(self, timestep = 0.1, x = 3, isWrapOn = False, bugs = 1):
 		self.timestep, self.x, self.isWrapOn = timestep, x, isWrapOn
 		self.__shifter = Shifter()
 		self.bugs = [2**i for i in range(8)]
-		self.bugIndex = rand.randint(0,7)
+		self.numBugs = bugs
+		self.bugIndex = [rand.randint(0,7) for i in range(self.numBugs)]
 		self.go = False
 
 
@@ -34,20 +35,24 @@ class Bug:
 
 	def doBugStuff(self):
 		if self.go:
-				self.__shifter.shiftByte(self.bugs[self.bugIndex])
+				pattern = 0
+				for thing in set(self.bugs[self.bugIndex(i)] for i in range(len(self.bugIndex)))
+					pattern += thing
+				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
-				if rand.randint(0,1) == 1:
-					self.bugIndex += 1
-					if self.bugIndex == 8: 
-						if not self.isWrapOn:
-							self.bugIndex = 6
-						else:
-							self.bugIndex = 0
-				else:
-					self.bugIndex -= 1
-					if self.bugIndex == -1: 
-						if not self.isWrapOn:
-							self.bugIndex = 2
-						else:
-							self.bugIndex = 7
+				for i in self.bugIndex:
+					if rand.randint(0,1) == 1:
+						self.bugIndex(i) += 1
+						if self.bugIndex(i) == 8: 
+							if not self.isWrapOn:
+								self.bugIndex(i) = 6
+							else:
+								self.bugIndex(i) = 0
+					else:
+						self.bugIndex(i) -= 1
+						if self.bugIndex(i) == -1: 
+							if not self.isWrapOn:
+								self.bugIndex(i) = 2
+							else:
+								self.bugIndex(i) = 7
 

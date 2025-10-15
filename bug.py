@@ -15,7 +15,7 @@ GPIO.setup(go, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 GPIO.setup(wrap, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 GPIO.setup(fast, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-boog = Bug()
+boog = Bug(0.1,3,False,2)
 
 doIGo = True
 def bugGo(channel):
@@ -48,7 +48,7 @@ def fastOn(channel):
 		doIFast = not doIFast
 
 def fastOff(channel):
-	boog.timestep = bugSpeed*3
+	boog.timestep = 0.1
 
 
 GPIO.add_event_detect(go, GPIO.RISING, callback = bugGo, bouncetime = 50)
