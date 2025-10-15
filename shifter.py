@@ -32,6 +32,7 @@ class Bug:
 
 	def stop(self):
 		self.go = False
+		self.__shifter.shiftByte(0)
 
 	def doBugStuff(self):
 		if self.go:
