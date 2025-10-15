@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 import random as rand
 
+#sorry for resubmitting, i forgot to make the stop command turn off the LED
+
 class Shifter:
 	def __init__(self, a=23, b=24, c=25):
 		self.serialPin, self.latchPin, self.clockPin = a, b, c
@@ -26,6 +28,8 @@ class Bug:
 		self.bugIndex = [rand.randint(0,7) for i in range(self.numBugs)]
 		self.go = False
 
+		#also i decided to add in the capability to add more bugs
+		#bc who doesnt want more than one bug
 
 	def start(self):
 		self.go = True
@@ -38,6 +42,8 @@ class Bug:
 		if self.go:
 				pattern = 0
 				for thing in set(self.bugs[self.bugIndex[i]] for i in range(len(self.bugIndex))):
+					#this gets the set of unique bug index values (bugs can occupy the same space)
+					#and then you just add them together and that gives the bug positions
 					pattern += thing
 				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)

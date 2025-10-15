@@ -15,7 +15,7 @@ GPIO.setup(go, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 GPIO.setup(wrap, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 GPIO.setup(fast, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-boog = Bug(0.1,3,False,3)
+boog = Bug(0.1,3,False,2) #extra call here bc i added more bugs, see the shifter code
 
 doIGo = True
 def bugGo(channel):
