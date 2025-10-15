@@ -45,7 +45,7 @@ class Bug:
 					#this gets the set of unique bug index values (bugs can occupy the same space)
 					#and then you just add them together and that gives the bug positions
 					pattern -= thing
-				self.__shiftr.shiftByte(pattern)
+				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
 				for i in range(len(self.bugIndex)):
 					if rand.randint(0,1) == 1:
