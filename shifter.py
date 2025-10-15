@@ -40,12 +40,12 @@ class Bug:
 
 	def doBugStuff(self):
 		if self.go:
-				pattern = 0
+				pattern = 2**8-1
 				for thing in set(self.bugs[self.bugIndex[i]] for i in range(len(self.bugIndex))):
 					#this gets the set of unique bug index values (bugs can occupy the same space)
 					#and then you just add them together and that gives the bug positions
-					pattern += thing
-				self.__shifter.shiftByte(pattern)
+					pattern -= thing
+				self.__shiftr.shiftByte(pattern)
 				time.sleep(self.timestep)
 				for i in range(len(self.bugIndex)):
 					if rand.randint(0,1) == 1:
