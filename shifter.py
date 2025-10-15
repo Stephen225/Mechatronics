@@ -40,7 +40,7 @@ class Bug:
 					pattern += thing
 				self.__shifter.shiftByte(pattern)
 				time.sleep(self.timestep)
-				for i in self.bugIndex:
+				for i in range(len(self.bugIndex)):
 					if rand.randint(0,1) == 1:
 						self.bugIndex[i] += 1
 						if self.bugIndex[i] == 8: 
