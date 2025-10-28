@@ -25,13 +25,13 @@ def web_page():
 		<input type="range" id="slider" name="slider" min="0" max="100" value="50">
         <br><br>
         Select LED: <br>
-        <input type="radio" id="button1" name="button" value="">
+        <input type="radio" id="button1" name="button" value="led1">
         <label for="led1">LED 1 (
         """ + str(led1) + """%)</label><br>
-        <input type="radio" id="button2" name="button" value="">
+        <input type="radio" id="button2" name="button" value="led2">
         <label for="led2">LED 2 (
         """ + str(led2) + """%)</label><br>
-        <input type="radio" id="button3" name="button" value="">
+        <input type="radio" id="button3" name="button" value="led3">
         <label for="led3">LED 3 (
         """ + str(led3) + """%)</label><br>
         <br>
@@ -63,8 +63,12 @@ def serve_web_page():
 		data_dict = parsePOSTdata(client_message)
 		print(data_dict)
 		if 'button' in data_dict.keys():
-			if data_dict["button"] == 'button1':
-				led1 = 100
+			if data_dict["button"] == 'led1':
+				led1 = int(data_dict["slider"])
+			else if data_dict["button"] == 'led2':
+				led2 = int(data_dict["slider"])
+			else if data_dict["button"] == 'led3':
+				led3 = int(data_dict["slider"])
 		else:
 			led1 = 0
 		'''
