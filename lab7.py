@@ -57,7 +57,7 @@ def serve_web_page():
 	while True:
 		print('Waiting for connection...')
 		conn, (client_ip, client_port) = s.accept()     # blocking call
-		client_message = conn.recv(1024)               # read request (required even if none)
+		client_message = conn.recv(1024).decode('utf-8')               # read request (required even if none)
 		print(f'Connection from {client_ip}')
 		data_dict = parsePOSTdata(client_message)
 		if 'led1' in data_dict.keys():   # make sure data was posted
