@@ -27,13 +27,13 @@ def web_page():
         Select LED: <br>
         <input type="radio" id="button1" name="button" value="">
         <label for="led1">LED 1 (
-        """ + led1 + """%)</label><br>
+        """ + str(led1) + """%)</label><br>
         <input type="radio" id="button2" name="button" value="">
         <label for="led2">LED 2 (
-        """ + led2 + """%)</label><br>
+        """ + str(led2) + """%)</label><br>
         <input type="radio" id="button3" name="button" value="">
         <label for="led3">LED 3 (
-        """ + led3 + """%)</label><br>
+        """ + str(led3) + """%)</label><br>
         <br>
         <input type="submit" id="submit" name="submit" value="">Change Brightness</button>
         </form>
