@@ -65,9 +65,9 @@ def serve_web_page():
 		if 'button' in data_dict.keys():
 			if data_dict["button"] == 'led1':
 				led1 = int(data_dict["slider"])
-			else if data_dict["button"] == 'led2':
+			elif data_dict["button"] == 'led2':
 				led2 = int(data_dict["slider"])
-			else if data_dict["button"] == 'led3':
+			elif data_dict["button"] == 'led3':
 				led3 = int(data_dict["slider"])
 		else:
 			led1 = 0
