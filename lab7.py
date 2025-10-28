@@ -35,7 +35,7 @@ def web_page():
         <label for="led3">LED 3 (
         """ + str(led3) + """%)</label><br>
         <br>
-        <input type="submit" id="submit" name="submit" value="">Change Brightness</button>
+        <input type="submit" id="submit" name="submit" value="Change Brightness">
         </form>
         </body>
 		</html>
@@ -69,8 +69,6 @@ def serve_web_page():
 				led2 = int(data_dict["slider"])
 			elif data_dict["button"] == 'led3':
 				led3 = int(data_dict["slider"])
-		else:
-			led1 = 0
 		'''
 		if 'led1' in data_dict.keys():   # make sure data was posted
 			led1 = data_dict["slider"]
