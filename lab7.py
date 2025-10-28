@@ -61,7 +61,13 @@ def serve_web_page():
 		client_message = conn.recv(1024).decode('utf-8')               # read request (required even if none)
 		print(f'Connection from {client_ip}')
 		data_dict = parsePOSTdata(client_message)
-		print(data_dict.keys())
+		print(data_dict)
+		if 'button' in data_dict.keys():
+			if data_dict["button"] == 'button1':
+				led1 = 100
+		else:
+			led1 = 0
+		'''
 		if 'led1' in data_dict.keys():   # make sure data was posted
 			led1 = data_dict["slider"]
 			print(led1)
@@ -77,7 +83,7 @@ def serve_web_page():
 			print(led3)
 		else:   # web page loading for 1st time so start with 0 for the LED byte
 			led3 = '0'
-
+		'''
 		conn.send(b'HTTP/1.1 200 OK\n')         # status line
 		conn.send(b'Content-type: text/html\n') # header (content type)
 		conn.send(b'Connection: close\r\n\r\n') # header (tell client to close at end)
