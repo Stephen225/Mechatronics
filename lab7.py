@@ -19,7 +19,7 @@ def web_page():
         <head> <title>leds and stuff</title>
         <style> body{
         	border: 2px solid black;
-			width: fit_content;
+			width: fit-content;
         	}</style>
 		</head>
 		<body>
