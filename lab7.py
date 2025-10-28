@@ -17,7 +17,10 @@ def web_page():
 	html = """
 		<html>
         <head> <title>leds and stuff</title>
-        <style> body{ border: 1px solid black;}</style>
+        <style> body{{
+        	border: 2px solid black;
+			width: fit_content;
+        	}}</style>
 		</head>
 		<body>
 		<form action="/" method="POST">
