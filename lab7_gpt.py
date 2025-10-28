@@ -13,19 +13,36 @@ for pin in led_pins:
 	p.start(0)
 	pwms.append(p)
 
-brightness = [0, 0, 0]  # store LED brightness %
+brightness = [0, 0, 0]
 
-# --- HTML + JavaScript ---
+# --- HTML + JS ---
 def make_page():
 	return f"""<!DOCTYPE html>
 <html>
 <head>
 	<title>LED Brightness Control</title>
 	<style>
-		body {{ font-family: Arial; margin: 40px; }}
-		h2 {{ margin-bottom: 20px; }}
-		.slider-container {{ margin-bottom: 25px; }}
-		.slider-label {{ display: inline-block; width: 80px; }}
+		body {{
+			font-family: Arial, sans-serif;
+			background: #fafafa;
+			margin: 40px;
+			padding: 30px 40px;
+			border: 5pt solid black;
+			border-radius: 10px;
+			width: fit-content;
+			box-shadow: 6px 6px 12px rgba(0,0,0,0.25);
+		}}
+		h2 {{
+			text-align: center;
+			margin-top: 0;
+		}}
+		.slider-container {{
+			margin: 25px 0;
+		}}
+		.slider-label {{
+			display: inline-block;
+			width: 80px;
+		}}
 	</style>
 </head>
 <body>
@@ -46,64 +63,4 @@ def make_page():
 		<span id="val2">{brightness[2]}</span>%
 	</div>
 
-	<script>
-		function updateLED(led, val) {{
-			document.getElementById("val" + led).innerText = val;
-			fetch("/", {{
-				method: "POST",
-				headers: {{ "Content-Type": "application/x-www-form-urlencoded" }},
-				body: "led=" + led + "&level=" + val
-			}})
-			.then(res => res.json())
-			.then(data => {{
-				for (let i = 0; i < 3; i++) {{
-					document.getElementById("val" + i).innerText = data.brightness[i];
-					document.getElementById("led" + i).value = data.brightness[i];
-				}}
-			}})
-			.catch(err => console.error("Error:", err));
-		}}
-	</script>
-</body>
-</html>
-"""
-
-# --- Request Handler ---
-class LEDHandler(BaseHTTPRequestHandler):
-	def do_GET(self):
-		self.send_response(200)
-		self.send_header("Content-type", "text/html")
-		self.end_headers()
-		self.wfile.write(make_page().encode())
-
-	def do_POST(self):
-		length = int(self.headers['Content-Length'])
-		body = self.rfile.read(length).decode()
-		data = parse_qs(body)
-
-		try:
-			idx = int(data['led'][0])
-			level = int(data['level'][0])
-			brightness[idx] = level
-			pwms[idx].ChangeDutyCycle(level)
-		except:
-			pass
-
-		self.send_response(200)
-		self.send_header("Content-type", "application/json")
-		self.end_headers()
-		self.wfile.write(json.dumps({"brightness": brightness}).encode())
-
-# --- Server setup ---
-if __name__ == "__main__":
-	server = HTTPServer(("", 8080), LEDHandler)
-	print("Server running on http://localhost:8080")
-	try:
-		server.serve_forever()
-	except KeyboardInterrupt:
-		pass
-	finally:
-		for p in pwms:
-			p.stop()
-		GPIO.cleanup()
-		server.server_close()
+	<scrip
