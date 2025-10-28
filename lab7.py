@@ -6,7 +6,7 @@ from time import sleep
 GPIO.setmode(GPIO.BCM)
 
 #pins or something
-pins = (16,20,21)
+pins = (17,27,22)
 for p in pins: GPIO.setup(p,GPIO.OUT)
 pwms = [GPIO.PWM(pin, 500) for pin in pins]
 for thing in pwms:
