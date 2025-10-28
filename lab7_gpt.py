@@ -23,6 +23,13 @@ def make_page():
 	<title>LED Brightness Control</title>
 	<style>
 		body {{ font-family: Arial; margin: 40px; }}
+		#interface {{
+			border: 5pt solid black;
+			padding: 25px;
+			width: 400px;
+			border-radius: 12px;
+			box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+		}}
 		h2 {{ margin-bottom: 20px; }}
 		.slider-container {{ margin-bottom: 25px; }}
 		.slider-label {{ display: inline-block; width: 80px; }}
