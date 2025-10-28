@@ -54,46 +54,41 @@ def parsePOSTdata(data):
 	return data_dict
 
 def serve_web_page():
-	try:
-		while True:
-			print('Waiting for connection...')
-			conn, (client_ip, client_port) = s.accept()     # blocking call
-			client_message = conn.recv(1024)               # read request (required even if none)
-			print(f'Connection from {client_ip}')
-			data_dict = parsePOSTdata(client_message)
-			if 'led1' in data_dict.keys():   # make sure data was posted
-				led1 = data_dict["slider"]
-				print(led1)
-			else:   # web page loading for 1st time so start with 0 for the LED byte
-				led1 = '0'
-			if 'led2' in data_dict.keys():   # make sure data was posted
-				led2 = data_dict["slider"]
-				print(led2)
-			else:   # web page loading for 1st time so start with 0 for the LED byte
-				led2 = '0'
-			if 'led3' in data_dict.keys():   # make sure data was posted
-				led3 = data_dict["slider"]
-				print(led3)
-			else:   # web page loading for 1st time so start with 0 for the LED byte
-				led3 = '0'
+	while True:
+		print('Waiting for connection...')
+		conn, (client_ip, client_port) = s.accept()     # blocking call
+		client_message = conn.recv(1024)               # read request (required even if none)
+		print(f'Connection from {client_ip}')
+		data_dict = parsePOSTdata(client_message)
+		if 'led1' in data_dict.keys():   # make sure data was posted
+			led1 = data_dict["slider"]
+			print(led1)
+		else:   # web page loading for 1st time so start with 0 for the LED byte
+			led1 = '0'
+		if 'led2' in data_dict.keys():   # make sure data was posted
+			led2 = data_dict["slider"]
+			print(led2)
+		else:   # web page loading for 1st time so start with 0 for the LED byte
+			led2 = '0'
+		if 'led3' in data_dict.keys():   # make sure data was posted
+			led3 = data_dict["slider"]
+			print(led3)
+		else:   # web page loading for 1st time so start with 0 for the LED byte
+			led3 = '0'
 
-			conn.send(b'HTTP/1.1 200 OK\n')         # status line
-			conn.send(b'Content-type: text/html\n') # header (content type)
-			conn.send(b'Connection: close\r\n\r\n') # header (tell client to close at end)
-            # send body in try block in case connection is interrupted:
-			try:
-				conn.sendall(web_page())                  # body
-			finally:
-				conn.close()
+		conn.send(b'HTTP/1.1 200 OK\n')         # status line
+		conn.send(b'Content-type: text/html\n') # header (content type)
+		conn.send(b'Connection: close\r\n\r\n') # header (tell client to close at end)
+        # send body in try block in case connection is interrupted:
+		try:
+			conn.sendall(web_page())                  # body
+		finally:
+			conn.close()
 
-			#set led pins to correct value
-			pwms[0].ChangeDutyCycle(led1)
-			pwms[1].ChangeDutyCycle(led2)
-			pwms[2].ChangeDutyCycle(led3)
-
-	except:
-		print('Closing socket')
-		s.close()
+		#set led pins to correct value
+		pwms[0].ChangeDutyCycle(led1)
+		pwms[1].ChangeDutyCycle(led2)
+		pwms[2].ChangeDutyCycle(led3)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP-IP socket
 s.bind(('', 8080))
