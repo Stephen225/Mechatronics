@@ -54,12 +54,14 @@ def parsePOSTdata(data):
 	return data_dict
 
 def serve_web_page():
+	global led1, led2, led3
 	while True:
 		print('Waiting for connection...')
 		conn, (client_ip, client_port) = s.accept()     # blocking call
 		client_message = conn.recv(1024).decode('utf-8')               # read request (required even if none)
 		print(f'Connection from {client_ip}')
 		data_dict = parsePOSTdata(client_message)
+		print(data_dict.keys())
 		if 'led1' in data_dict.keys():   # make sure data was posted
 			led1 = data_dict["slider"]
 			print(led1)
