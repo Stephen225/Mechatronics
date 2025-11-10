@@ -60,8 +60,8 @@ class Stepper:
         Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
         Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
         self.s.shiftByte(Stepper.shifter_outputs)
-        self.angle.value += dir/Stepper.steps_per_degree
-        self.angle.value %= 360         # limit to [0,359.9+] range
+        self.angle += dir/Stepper.steps_per_degree
+        self.angle %= 360         # limit to [0,359.9+] range
 
     # Move relative angle from current position:
     def __rotate(self, delta):
@@ -81,7 +81,7 @@ class Stepper:
 
     # Move to an absolute angle taking the shortest possible path:
     def goAngle(self, angle):
-        self.delta = angle-self.angle.value
+        self.delta = angle-self.angle
         self.rotate(delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
