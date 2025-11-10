@@ -35,14 +35,14 @@ class Stepper:
     # Class attributes:
     num_steppers = 0      # track number of Steppers instantiated
     shifter_outputs = 0   # track shift register outputs for all motors
-    #seq = [0b0001,0b0011,0b0010,0b0110,0b0100,0b1100,0b1000,0b1001] # CCW sequence
-    seq = [0b0001, 0b0010, 0b0100, 0b1000]
+    seq = [0b0001,0b0011,0b0010,0b0110,0b0100,0b1100,0b1000,0b1001] # CCW sequence
+    #seq = [0b0001, 0b0010, 0b0100, 0b1000]
     delay = 2000          # delay between motor steps [us]
     steps_per_degree = 4096/360    # 4096 steps/rev * 1/360 rev/deg
 
-    def __init__(self, shifter, lock):
+    def __init__(self, shifter, lock, angle):
         self.s = shifter           # shift register
-        self.angle = 0             # current output shaft angle
+        self.angle = angle            # current output shaft angle
         self.step_state = 0        # track position in sequence
         self.shifter_bit_start = 4*Stepper.num_steppers  # starting bit position
         self.lock = lock           # multiprocessing lock
@@ -62,8 +62,8 @@ class Stepper:
         Stepper.shifter_outputs |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
         self.s.shiftByte(Stepper.shifter_outputs)
-        self.angle += dir/Stepper.steps_per_degree
-        self.angle %= 360         # limit to [0,359.9+] range
+        self.angle.value += dir/Stepper.steps_per_degree
+        self.angle.value %= 360         # limit to [0,359.9+] range
 
     # Move relative angle from current position:
     def __rotate(self, delta):
@@ -83,12 +83,13 @@ class Stepper:
 
     # Move to an absolute angle taking the shortest possible path:
     def goAngle(self, angle):
-         pass
+        self.delta = angle-self.angle.value
+        self.rotate(self.delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
     # Set the motor zero point
     def zero(self):
-        self.angle = 0
+        self.angle.value = 0
 
 
 # Example use:
@@ -111,9 +112,12 @@ if __name__ == '__main__':
     lock1 = multiprocessing.Lock()
     lock2 = multiprocessing.Lock()
 
+    angle1 = multiprocessing.Value('i',0)
+    angle2 = multiprocessing.Value('i',0)
+
     # Instantiate 2 Steppers:
-    m1 = Stepper(s, lock1)
-    m2 = Stepper(s, lock2)
+    m1 = Stepper(s, lock1, angle1)
+    m2 = Stepper(s, lock2, angle2)
 
     # Zero the motors:
     m1.zero()
@@ -121,17 +125,17 @@ if __name__ == '__main__':
 
     # Move as desired, with eacg step occuring as soon as the previous 
     # step ends:
-    #m1.rotate(-90)
-    #m1.rotate(45)
-    #m1.rotate(-90)
-    #m1.rotate(45)
+    m1.rotate(-90)
+    m1.rotate(45)
+    m1.rotate(-90)
+    m1.rotate(45)
 
     # If separate multiprocessing.lock objects are used, the second motor
     # will run in parallel with the first motor:
     m2.rotate(180)
-    #m2.rotate(-45)
-    #m2.rotate(45)
-    #m2.rotate(-90)
+    m2.rotate(-45)
+    m2.rotate(45)
+    m2.rotate(-90)
  
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
