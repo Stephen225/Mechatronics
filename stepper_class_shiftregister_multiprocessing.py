@@ -100,8 +100,8 @@ if __name__ == '__main__':
     # execute multiple operations at the same time:
     lock = multiprocessing.Lock()
 
-    angle1 = multiprocessing.value('f')
-    angle2 = multiprocessing.value('f')
+    angle1 = multiprocessing.Value('f')
+    angle2 = multiprocessing.Value('f')
 
     # Instantiate 2 Steppers:
     m1 = Stepper(s, lock, angle1)
