@@ -39,9 +39,9 @@ class Stepper:
     delay = 2000          # delay between motor steps [us]
     steps_per_degree = 4096/360    # 4096 steps/rev * 1/360 rev/deg
 
-    def __init__(self, shifter, lock):
+    def __init__(self, shifter, lock, angle):
         self.s = shifter           # shift register
-        self.angle = 0             # current output shaft angle
+        self.angle = angle             # current output shaft angle
         self.step_state = 0        # track position in sequence
         self.shifter_bit_start = 4*Stepper.num_steppers  # starting bit position
         self.lock = lock           # multiprocessing lock
@@ -60,8 +60,8 @@ class Stepper:
         Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
         Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
         self.s.shiftByte(Stepper.shifter_outputs)
-        self.angle += dir/Stepper.steps_per_degree
-        self.angle %= 360         # limit to [0,359.9+] range
+        self.angle.value += dir/Stepper.steps_per_degree
+        self.angle.value %= 360         # limit to [0,359.9+] range
 
     # Move relative angle from current position:
     def __rotate(self, delta):
@@ -81,7 +81,8 @@ class Stepper:
 
     # Move to an absolute angle taking the shortest possible path:
     def goAngle(self, angle):
-         pass
+        self.delta = angle-self.angle.value
+        self.rotate(delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
     # Set the motor zero point
@@ -99,9 +100,12 @@ if __name__ == '__main__':
     # execute multiple operations at the same time:
     lock = multiprocessing.Lock()
 
+    angle1 = multiprocessing.value('f')
+    angle2 = multiprocessing.value('f')
+
     # Instantiate 2 Steppers:
-    m1 = Stepper(s, lock)
-    m2 = Stepper(s, lock)
+    m1 = Stepper(s, lock, angle1)
+    m2 = Stepper(s, lock, angle2)
 
     # Zero the motors:
     m1.zero()
@@ -109,18 +113,20 @@ if __name__ == '__main__':
 
     # Move as desired, with eacg step occuring as soon as the previous 
     # step ends:
-    m1.rotate(-90)
-    m1.rotate(45)
-    m1.rotate(-90)
-    m1.rotate(45)
-
+    #m1.rotate(-90)
+    #m1.rotate(45)
+    #m1.rotate(-90)
+    #m1.rotate(45)
+    m1.goAngle(90)
+    m1.goAngle(-90)
     # If separate multiprocessing.lock objects are used, the second motor
     # will run in parallel with the first motor:
-    m2.rotate(180)
-    m2.rotate(-45)
-    m2.rotate(45)
-    m2.rotate(-90)
- 
+    ##m2.rotate(180)
+    #m2.rotate(-45)
+    #m2.rotate(45)
+    #m2.rotate(-90)
+    m2.goAngle(90)
+    m2.goAngle(-90)
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
     try:
