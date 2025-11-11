@@ -72,7 +72,7 @@ class Stepper:
 
     # Move relative angle from current position:
     def __rotate(self, delta):
-        self.lock.acquire()                 # wait until the lock is available
+        #self.lock.acquire()                 # wait until the lock is available
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         dir = self.__sgn(delta)        # find the direction (+/-1)
         print(f"going {numSteps} in {dir} direction")
@@ -80,7 +80,7 @@ class Stepper:
             self.__step(dir)
             time.sleep(Stepper.delay/1e6)
         print(f"i am at {self.angle} angle yippee")
-        self.lock.release()
+        #self.lock.release()
 
     # Move relative angle from current position:
     def rotate(self, delta):
