@@ -64,7 +64,7 @@ class Stepper:
         Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
         #print(bin(Stepper.shifter_outputs.value))
-        print(str(self.shifter_bit_start)+" "+str(self.step_state), flush=True)
+        print(self.shifter_bit_start," ",self.step_state, flush=True)
         self.s.shiftByte(Stepper.shifter_outputs.value)
         self.angle += direc/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
@@ -74,9 +74,9 @@ class Stepper:
         #self.lock.acquire()                 # wait until the lock is available
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         direc = self.__sgn(delta)        # find the direction (+/-1)
-        print(numSteps, " ", direc)
         for s in range(numSteps):      # take the steps
             self.lock.acquire()
+            print(self.shifter_bit_start," ",direc, flush=True)
             self.__step(direc)
             self.lock.release()
             time.sleep(Stepper.delay/1e6)
