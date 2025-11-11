@@ -56,35 +56,35 @@ class Stepper:
 
     # Move a single +/-1 step in the motor sequence:
     def __step(self, direc):
-        with self.lock:
-            #print("pre direc state ",self.step_state,flush=True)
-            self.step_state += direc   # increment/decrement the step
-            #print("post direc state ",self.step_state,flush=True)
-            self.step_state %= 8      # ensure result stays in [0,7]
-            #print("post mod state ",self.step_state,flush=True)
-            #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
-            #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
-            Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
-            Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
-            #print("post bitwise state ",self.step_state,flush=True)
-            #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
-            #print(bin(Stepper.shifter_outputs.value))
-            #print(self.shifter_bit_start," ",self.step_state, flush=True)
-            print(f"[Motor {self.shifter_bit_start}] step_state={self.step_state} angle={self.angle:.2f}", flush=True)
-            self.s.shiftByte(Stepper.shifter_outputs.value)
-            #print("post shift state ",self.step_state,flush=True)
-            self.angle += direc/Stepper.steps_per_degree
-            self.angle %= 360         # limit to [0,359.9+] range
-            #print("post angle state ",self.step_state,flush=True)
+        #with self.lock:
+        #print("pre direc state ",self.step_state,flush=True)
+        self.step_state += direc   # increment/decrement the step
+        #print("post direc state ",self.step_state,flush=True)
+        self.step_state %= 8      # ensure result stays in [0,7]
+        #print("post mod state ",self.step_state,flush=True)
+        #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
+        #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        Stepper.shifter_outputs &= ~(0b1111<<self.shifter_bit_start)
+        Stepper.shifter_outputs |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        #print("post bitwise state ",self.step_state,flush=True)
+        #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
+        #print(bin(Stepper.shifter_outputs.value))
+        #print(self.shifter_bit_start," ",self.step_state, flush=True)
+        #print(f"[Motor {self.shifter_bit_start}] step_state={self.step_state} angle={self.angle:.2f}", flush=True)
+        self.s.shiftByte(Stepper.shifter_outputs)
+        #print("post shift state ",self.step_state,flush=True)
+        self.angle += direc/Stepper.steps_per_degree
+        self.angle %= 360         # limit to [0,359.9+] range
+        #print("post angle state ",self.step_state,flush=True)
 
     # Move relative angle from current position:
     def __rotate(self, delta):
-        #self.lock.acquire()                 # wait until the lock is available
+        self.lock.acquire()                 # wait until the lock is available
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         direc = self.__sgn(delta)        # find the direction (+/-1)
-        print(f"going {numSteps} steps in {direc} direction", flush=True)
+        #print(f"going {numSteps} steps in {direc} direction", flush=True)
         for i in range(numSteps):      # take the steps
-            print(f"step {i} going {direc}")
+            #print(f"step {i} going {direc}")
             #self.lock.acquire()
             #print("step on shifta ",self.shifter_bit_start,flush=True)
             #print("step start state ",self.step_state,flush=True)   
@@ -92,7 +92,7 @@ class Stepper:
             #print("step end state ",self.step_state,flush=True)
             #self.lock.release()
             time.sleep(Stepper.delay/1e6)
-        #self.lock.release()
+        self.lock.release()
 
     # Move relative angle from current position:
     def rotate(self, delta):
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
     angle1 = multiprocessing.Value('f')
     angle2 = multiprocessing.Value('f')
-    Stepper.shifter_outputs = multiprocessing.Value('i',0)
+    #Stepper.shifter_outputs = multiprocessing.Value('i',0)
 
     # Instantiate 2 Steppers:
     m1 = Stepper(s, lock1, angle1)
