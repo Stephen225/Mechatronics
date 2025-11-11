@@ -65,12 +65,15 @@ class Stepper:
         #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
         Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
         Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        print("post bitwise state ",self.step_state,flush=True)
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
         #print(bin(Stepper.shifter_outputs.value))
         #print(self.shifter_bit_start," ",self.step_state, flush=True)
         self.s.shiftByte(Stepper.shifter_outputs.value)
+        print("post shift state ",self.step_state,flush=True)
         self.angle += direc/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
+        print("post angle state ",self.step_state,flush=True)
 
     # Move relative angle from current position:
     def __rotate(self, delta):
@@ -80,7 +83,9 @@ class Stepper:
         for s in range(numSteps):      # take the steps
             self.lock.acquire()
             print("step on shifta ",self.shifter_bit_start,flush=True)
+            print("step start state ",self.step_state,flush=True)   
             self.__step(direc)
+            print("step end state ",self.step_state,flush=True)
             self.lock.release()
             time.sleep(Stepper.delay/1e6)
         #self.lock.release()
