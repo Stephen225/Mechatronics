@@ -37,7 +37,7 @@ class Stepper:
     shifter_outputs = 0   # track shift register outputs for all motors
     seq = [0b0001,0b0011,0b0010,0b0110,0b0100,0b1100,0b1000,0b1001] # CCW sequence
     #seq = [0b0001, 0b0010, 0b0100, 0b1000]
-    delay = 2000          # delay between motor steps [us]
+    delay = 20000          # delay between motor steps [us]
     steps_per_degree = 4096/360    # 4096 steps/rev * 1/360 rev/deg
 
     def __init__(self, shifter, lock, angle):
@@ -64,7 +64,7 @@ class Stepper:
         Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
         #print(bin(Stepper.shifter_outputs.value))
-        #print(str(self.shifter_bit_start)+" "+str(self.step_state), flush=True)
+        print(str(self.shifter_bit_start)+" "+str(self.step_state), flush=True)
         self.s.shiftByte(Stepper.shifter_outputs.value)
         self.angle += dir/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
