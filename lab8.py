@@ -56,16 +56,16 @@ class Stepper:
 
     # Move a single +/-1 step in the motor sequence:
     def __step(self, dir):
-        with self.lock:
-            self.step_state += dir    # increment/decrement the step
-            self.step_state %= 8      # ensure result stays in [0,7]
-            #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
-            #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
-            Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
-            Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
-            #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
-            #print(bin(Stepper.shifter_outputs.value))
-            self.s.shiftByte(Stepper.shifter_outputs.value)
+        self.step_state += dir    # increment/decrement the step
+        self.step_state %= 8      # ensure result stays in [0,7]
+        #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
+        #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
+        Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
+        #print(bin(Stepper.shifter_outputs.value))
+        print(str(self.shifter_bit_start)+" "+str(self.step_state))
+        self.s.shiftByte(Stepper.shifter_outputs.value)
         self.angle += dir/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
 
@@ -75,7 +75,9 @@ class Stepper:
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         dir = self.__sgn(delta)        # find the direction (+/-1)
         for s in range(numSteps):      # take the steps
+            self.lock.acquire()
             self.__step(dir)
+            self.lock.release()
             time.sleep(Stepper.delay/1e6)
         #self.lock.release()
 
