@@ -57,10 +57,12 @@ class Stepper:
     def __step(self, dir):
         self.step_state += dir    # increment/decrement the step
         self.step_state %= 8      # ensure result stays in [0,7]
-        Stepper.shifter_outputs &= ~(0b00001111<<self.shifter_bit_start)
-        Stepper.shifter_outputs |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        temp = Stepper.shifter_outputs 
+        temp &= ~(0b00001111<<self.shifter_bit_start)
+        temp |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         print(f"motor {self.shifter_bit_start} state {self.step_state}")
-        self.s.shiftByte(Stepper.shifter_outputs)
+        self.s.shiftByte(temp)
+        Stepper.shifter_outputs = temp
         self.angle += dir/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
 
@@ -104,6 +106,7 @@ if __name__ == '__main__':
 
     angle1 = multiprocessing.Value('f')
     angle2 = multiprocessing.Value('f')
+    Stepper.shifter_outputs = multiprocessing.Value('i')
 
     # Instantiate 2 Steppers:
     m1 = Stepper(s, lock1, angle1)
