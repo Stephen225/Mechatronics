@@ -57,13 +57,16 @@ class Stepper:
     def __step(self, dir):
         self.step_state += dir    # increment/decrement the step
         self.step_state %= 8      # ensure result stays in [0,7]
-        temp = Stepper.shifter_outputs.value 
-        temp &= ~(0b00001111<<self.shifter_bit_start)
-        temp |= Stepper.seq[self.step_state]<<self.shifter_bit_start
-        print(f"motor {self.shifter_bit_start} state {self.step_state}")
-        print(f"motor {self.shifter_bit_start} shifting {bin(temp)}")
-        self.s.shiftByte(temp)
-        Stepper.shifter_outputs.value = temp
+        #temp = Stepper.shifter_outputs.value 
+        #temp &= ~(0b00001111<<self.shifter_bit_start)
+        #temp |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        Stepper.shifter_outputs.value &= ~(0b00001111<<self.shifter_bit_start)
+        Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        #print(f"motor {self.shifter_bit_start} state {self.step_state}")
+        #print(f"motor {self.shifter_bit_start} shifting {bin(temp)}")
+        #self.s.shiftByte(temp)
+        self.s.shiftByte(Stepper.shifter_outputs.value)
+        #Stepper.shifter_outputs.value = temp
         self.angle += dir/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
 
