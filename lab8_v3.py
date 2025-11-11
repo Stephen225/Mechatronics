@@ -96,6 +96,15 @@ class Stepper:
         self.rotate(self.delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
+    def pause(self, pauseTime):
+        time.sleep(0.1)
+        p = multiprocessing.Process(target=self.__pause, args=(pauseTime,))
+        p.start()
+
+    def __pause(self, pauseTime):
+        time.sleep(pauseTime)
+
+
     # Set the motor zero point
     def zero(self):
         self.angle = 0
@@ -138,13 +147,18 @@ if __name__ == '__main__':
     #m2.rotate(-90)
 
     m1.goAngle(90)
+    m1.pause(0.5)
     m1.goAngle(-45)
+    m1.pause(0.5)
 
     m2.goAngle(-90)
+    m2.pause(0.5)
     m2.goAngle(45)
 
     m1.goAngle(-135)
+    m1.pause(0.5)
     m1.goAngle(135)
+    m1.pause(0.5)
     m1.goAngle(0)
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
