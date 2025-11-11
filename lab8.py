@@ -57,13 +57,15 @@ class Stepper:
     # Move a single +/-1 step in the motor sequence:
     def __step(self, dir):
         self.step_state += dir    # increment/decrement the step
-        self.step_state %= 4      # ensure result stays in [0,7]
-        Stepper.shifter_outputs &= ~(0b1111<<self.shifter_bit_start)
-        Stepper.shifter_outputs |= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        self.step_state %= 8      # ensure result stays in [0,7]
+        #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
+        #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
+        Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
+        Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
-        self.s.shiftByte(Stepper.shifter_outputs)
-        self.angle.value += dir/Stepper.steps_per_degree
-        self.angle.value %= 360         # limit to [0,359.9+] range
+        self.s.shiftByte(Stepper.shifter_outputs.value)
+        self.angle += dir/Stepper.steps_per_degree
+        self.angle %= 360         # limit to [0,359.9+] range
 
     # Move relative angle from current position:
     def __rotate(self, delta):
@@ -83,13 +85,13 @@ class Stepper:
 
     # Move to an absolute angle taking the shortest possible path:
     def goAngle(self, angle):
-        self.delta = angle-self.angle.value
+        self.delta = angle-self.angle
         self.rotate(self.delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
     # Set the motor zero point
     def zero(self):
-        self.angle.value = 0
+        self.angle = 0
 
 
 # Example use:
@@ -112,8 +114,9 @@ if __name__ == '__main__':
     lock1 = multiprocessing.Lock()
     lock2 = multiprocessing.Lock()
 
-    angle1 = multiprocessing.Value('i',0)
-    angle2 = multiprocessing.Value('i',0)
+    angle1 = multiprocessing.Value('f')
+    angle2 = multiprocessing.Value('f')
+    Stepper.shifter_outputs = multiprocessing.Value('i',0)
 
     # Instantiate 2 Steppers:
     m1 = Stepper(s, lock1, angle1)
