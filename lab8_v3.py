@@ -36,8 +36,8 @@ class Stepper:
     num_steppers = 0      # track number of Steppers instantiated
     shifter_outputs = 0   # track shift register outputs for all motors
     seq = [0b0001,0b0011,0b0010,0b0110,0b0100,0b1100,0b1000,0b1001] # CCW sequence
-    delay = 20000          # delay between motor steps [us]
-    steps_per_degree = 4096/360    # 4096 steps/rev * 1/360 rev/deg
+    delay = 10000          # delay between motor steps [us]
+    steps_per_degree = 512/360    # 4096 steps/rev * 1/360 rev/deg
 
     def __init__(self, shifter, lock, angle):
         self.s = shifter           # shift register
@@ -147,18 +147,18 @@ if __name__ == '__main__':
     #m2.rotate(-90)
 
     m1.goAngle(90)
-    m1.pause(0.5)
+    #m1.pause(0.5)
     m1.goAngle(-45)
-    m1.pause(0.5)
+    #m1.pause(0.5)
 
     m2.goAngle(-90)
-    m2.pause(0.5)
+    #m2.pause(0.5)
     m2.goAngle(45)
 
     m1.goAngle(-135)
-    m1.pause(0.5)
+    #m1.pause(0.5)
     m1.goAngle(135)
-    m1.pause(0.5)
+    #m1.pause(0.5)
     m1.goAngle(0)
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
