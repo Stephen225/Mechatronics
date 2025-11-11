@@ -151,9 +151,9 @@ if __name__ == '__main__':
     m1.goAngle(-45)
     #m1.pause(0.5)
 
-    m2.goAngle(-90)
+    #m2.goAngle(-90)
     #m2.pause(0.5)
-    m2.goAngle(45)
+    #m2.goAngle(45)
 
     m1.goAngle(-135)
     #m1.pause(0.5)
