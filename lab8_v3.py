@@ -89,13 +89,14 @@ class Stepper:
         p.start()
 
     # Move to an absolute angle taking the shortest possible path:
-    def goAngle(self, angle):
+    def goToAngle(self, angle):
         angle %= 360
         self.delta = angle-self.angle
         if self.delta > 180: #non-optimal route
             self.delta -= 360
         elif self.delta < -180:
             self.delta += 360
+        print(f"i am going {self.delta} degrees from {self.angle} to {angle}")
         self.rotate(self.delta)
          # COMPLETE THIS METHOD FOR LAB 8
 
@@ -149,20 +150,20 @@ if __name__ == '__main__':
     #m2.rotate(45)
     #m2.rotate(-90)
 
-    m1.goAngle(90)
+    m1.goToAngle(90)
     #m1.pause(0.5)
-    m1.goAngle(-45)
+    m1.goToAngle(-45)
     #m1.pause(0.5)
 
-    #m2.goAngle(-90)
+    #m2.goToAngle(-90)
     #m2.pause(0.5)
-    #m2.goAngle(45)
+    #m2.goToAngle(45)
 
-    m1.goAngle(-135)
+    m1.goToAngle(-135)
     #m1.pause(0.5)
-    m1.goAngle(135)
+    m1.goToAngle(135)
     #m1.pause(0.5)
-    m1.goAngle(0)
+    m1.goToAngle(0)
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
     try:
