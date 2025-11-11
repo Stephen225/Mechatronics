@@ -90,6 +90,7 @@ class Stepper:
 
     # Move to an absolute angle taking the shortest possible path:
     def goToAngle(self, angle):
+        self.lock.acquire()
         angle %= 360
         self.delta = angle-self.angle
         if self.delta > 180: #non-optimal route
@@ -98,6 +99,7 @@ class Stepper:
             self.delta += 360
         print(f"i am going {self.delta} degrees from {self.angle} to {angle}")
         self.rotate(self.delta)
+        self.lock.release()
          # COMPLETE THIS METHOD FOR LAB 8
 
     def pause(self, pauseTime):
