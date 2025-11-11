@@ -75,9 +75,11 @@ class Stepper:
         self.lock.acquire()                 # wait until the lock is available
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         dir = self.__sgn(delta)        # find the direction (+/-1)
+        print(f"going {numSteps} in {dir} direction")
         for s in range(numSteps):      # take the steps
             self.__step(dir)
             time.sleep(Stepper.delay/1e6)
+        print(f"i am at {self.angle} angle yippee")
         self.lock.release()
 
     # Move relative angle from current position:
@@ -147,10 +149,8 @@ if __name__ == '__main__':
     #m2.rotate(-90)
 
     m1.goAngle(90)
-    print("going to 90")
     #m1.pause(0.5)
     m1.goAngle(-45)
-    print("going to -45")
     #m1.pause(0.5)
 
     #m2.goAngle(-90)
@@ -158,13 +158,10 @@ if __name__ == '__main__':
     #m2.goAngle(45)
 
     m1.goAngle(-135)
-    print("going to -135")
     #m1.pause(0.5)
     m1.goAngle(135)
-    print("going to 135")
     #m1.pause(0.5)
     m1.goAngle(0)
-    print("going to 0")
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
     try:
