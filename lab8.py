@@ -56,15 +56,18 @@ class Stepper:
 
     # Move a single +/-1 step in the motor sequence:
     def __step(self, direc):
+        print("pre direc state ",self.step_state,flush=True)
         self.step_state += direc   # increment/decrement the step
+        print("post direc state ",self.step_state,flush=True)
         self.step_state %= 8      # ensure result stays in [0,7]
+        print("post mod state ",self.step_state,flush=True)
         #Stepper.shifter_outputs |= 0b1111<<self.shifter_bit_start
         #Stepper.shifter_outputs &= Stepper.seq[self.step_state]<<self.shifter_bit_start
         Stepper.shifter_outputs.value &= ~(0b1111<<self.shifter_bit_start)
         Stepper.shifter_outputs.value |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         #print(str(self.shifter_bit_start)+" "+str(Stepper.shifter_outputs))
         #print(bin(Stepper.shifter_outputs.value))
-        print(self.shifter_bit_start," ",self.step_state, flush=True)
+        #print(self.shifter_bit_start," ",self.step_state, flush=True)
         self.s.shiftByte(Stepper.shifter_outputs.value)
         self.angle += direc/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
@@ -76,7 +79,7 @@ class Stepper:
         direc = self.__sgn(delta)        # find the direction (+/-1)
         for s in range(numSteps):      # take the steps
             self.lock.acquire()
-            print(self.shifter_bit_start," ",direc, flush=True)
+            print("step on shifta ",self.shifter_bit_start,flush=True)
             self.__step(direc)
             self.lock.release()
             time.sleep(Stepper.delay/1e6)
