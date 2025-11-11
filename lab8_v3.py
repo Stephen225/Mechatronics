@@ -59,7 +59,7 @@ class Stepper:
         self.step_state %= 8      # ensure result stays in [0,7]
         Stepper.shifter_outputs &= ~(0b00001111<<self.shifter_bit_start)
         Stepper.shifter_outputs |= Stepper.seq[self.step_state]<<self.shifter_bit_start
-        print(self.step_state)
+        print(f"motor {self.shifter_bit_start} state {self.step_state}")
         self.s.shiftByte(Stepper.shifter_outputs)
         self.angle += dir/Stepper.steps_per_degree
         self.angle %= 360         # limit to [0,359.9+] range
@@ -115,8 +115,8 @@ if __name__ == '__main__':
 
     # Move as desired, with eacg step occuring as soon as the previous 
     # step ends:
-    m1.rotate(180)
-    #m1.rotate(45)
+    m1.rotate(-90)
+    m1.rotate(45)
     #m1.rotate(-90)
     #m1.rotate(45)
     # If separate multiprocessing.lock objects are used, the second motor
