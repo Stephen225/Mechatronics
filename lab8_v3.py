@@ -88,7 +88,7 @@ class Stepper:
         self.delta = angle-self.angle
         if self.delta > 180: #non-optimal route
             self.delta -= 360
-        else if self.delta < -180:
+        elif self.delta < -180:
             self.delta += 360
         self.rotate(self.delta)
          # COMPLETE THIS METHOD FOR LAB 8
