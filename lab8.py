@@ -82,7 +82,7 @@ class Stepper:
         #self.lock.acquire()                 # wait until the lock is available
         numSteps = int(Stepper.steps_per_degree * abs(delta))    # find the right # of steps
         direc = self.__sgn(delta)        # find the direction (+/-1)
-        print(f"going {self.numSteps} steps in {direc} direction", flush=True)
+        print(f"going {numSteps} steps in {direc} direction", flush=True)
         for i in range(numSteps):      # take the steps
             print(f"step {i} going {direc}")
             #self.lock.acquire()
