@@ -147,10 +147,10 @@ if __name__ == '__main__':
     #m2.rotate(-90)
 
     m1.goAngle(90)
-    time.sleep(1)
+    print("going to 90")
     #m1.pause(0.5)
     m1.goAngle(-45)
-    time.sleep(1)
+    print("going to -45")
     #m1.pause(0.5)
 
     #m2.goAngle(-90)
@@ -158,12 +158,13 @@ if __name__ == '__main__':
     #m2.goAngle(45)
 
     m1.goAngle(-135)
-    time.sleep(1)
+    print("going to -135")
     #m1.pause(0.5)
     m1.goAngle(135)
-    time.sleep(1)
+    print("going to 135")
     #m1.pause(0.5)
     m1.goAngle(0)
+    print("going to 0")
     # While the motors are running in their separate processes, the main
     # code can continue doing its thing: 
     try:
