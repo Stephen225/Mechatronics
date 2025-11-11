@@ -61,7 +61,7 @@ class Stepper:
         temp &= ~(0b00001111<<self.shifter_bit_start)
         temp |= Stepper.seq[self.step_state]<<self.shifter_bit_start
         print(f"motor {self.shifter_bit_start} state {self.step_state}")
-        print(f"motor {self.shifter_bit_start} shifting {temp}")
+        print(f"motor {self.shifter_bit_start} shifting {bin(temp)}")
         self.s.shiftByte(temp)
         Stepper.shifter_outputs.value = temp
         self.angle += dir/Stepper.steps_per_degree
