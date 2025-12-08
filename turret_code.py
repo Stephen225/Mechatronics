@@ -165,8 +165,9 @@ def make_page():
     <div>
         <h2>Current Motor Angles:</h2>
         <ul>
-            <li>{hor.angle.value}</li>
-            <li>{vert.angle.value}</li>
+            <li id="horAngle">{hor.angle.value}</li>
+            <li id="vertAngle">{vert.angle.value}</li>
+
         </ul>
     </div>
     <div id="afterJSON" style="position:relative; text-align:center; margin-top:300px;">
@@ -198,7 +199,8 @@ def make_page():
 <audio id="laserSound" src="laser_sound.mp3"></audio>
 
 <script>
-
+    setInterval(updateAngles, 200);
+    
     function send(cmd) {{
         fetch("/", {{
             method: "POST",
@@ -263,7 +265,14 @@ def make_page():
             body: "goTo=1&r=" + r + "&t=" + t + "&z=" + z
         }});
     }}
-
+    function updateAngles() {{
+        fetch("/angles")
+            .then(res => res.json())
+            .then(data => {{
+                document.getElementById("horAngle").innerText = data.hor.toFixed(2);
+                document.getElementById("vertAngle").innerText = data.vert.toFixed(2);
+            }});
+    }}
     function motorAngles() {{
         let pitch = document.getElementById("pitchval").value;
         let yaw = document.getElementById("yawval").value;
@@ -292,6 +301,13 @@ class WebHandler(BaseHTTPRequestHandler):
 
             with open(filepath, "rb") as f:
                 self.wfile.write(f.read())
+            return
+        if self.path == "/angles":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            resp = {"hor": hor.angle.value, "vert": vert.angle.value}
+            self.wfile.write(json.dumps(resp).encode())
             return
         self.send_response(200)
         self.send_header("Content-type", "text/html")
