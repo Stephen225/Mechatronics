@@ -176,7 +176,10 @@ def make_page():
         <input id="rval" class="inputbox" placeholder="r">
         <input id="tval" class="inputbox" placeholder="theta">
         <input id="zval" class="inputbox" placeholder="z">
-        <button class="btn" onclick="reference()">reference</button>
+        <div>
+            <button class="btn" onclick="reference()">reference</button>
+            <button class="btn" onclick="sendTo()">go here</button>
+        </div>
     </div>
     <div class="box">
         <input id="rval2" class="inputbox" placeholder="r">
@@ -200,9 +203,6 @@ def make_page():
     function jsonButton(){{
         send('json');
         document.getElementById("afterJSON").style.display = 'block'; //show stuff
-    }}
-    function Laser(){{
-    	send('fire');
     }}
     function fireLaser(){{
         const gif = document.getElementById("laserGif");
