@@ -39,7 +39,7 @@ ip_string = "172.20.10.5" # mine
 
 # some random stuff
 pos_tol = 3 * np.pi/180 # angular tolerance between us and the next turret over
-assumed_height = 0.2 # turret height for everyone else
+assumed_height = 5 # turret height for everyone else
 us_turret_num = 1 # our turret number, to find our position and also remove from json
 jog_amount = 1 #degrees to jog each arrow click
 test_mode = True # change this when i want to shoot everything
@@ -140,7 +140,7 @@ def make_page():
         </div>
 
     </div>
-    
+
     <div>
         <h3>Current Motor Angles:</h3>
         <ul>
@@ -171,10 +171,6 @@ def make_page():
             plays-inline
             ">
     </div>
-    <div id="afterJSON" style="position:relative; text-align:center; margin-top:300px;">
-        <button class="btn" onclick="send('find')">play peekaboo</button>
-        <button class="btn" onclick="send('kill')">kill them all</button>
-    </div>
 
 </div>
 
@@ -193,6 +189,10 @@ def make_page():
     <!-- JSON fetch -->
     <div class="row">
         <button class="btn" onclick="jsonButton()">get them jsons</button>
+        <div id="afterJSON" style="position:relative; text-align:center; margin-top:300px;">
+            <button class="btn" onclick="send('find')">play peekaboo</button>
+            <button class="btn" onclick="send('kill')">kill them all</button>
+        </div>
     </div>
 
 
@@ -420,8 +420,8 @@ def calibrate(): # run this after enough reference points
 		r = ref_positions[i][0]
 		t = ref_positions[i][1]
 		z = ref_positions[i][2]
-		pitch = ref_positions[i][3]
-		yaw = ref_positions[i][4]
+		pitch = ref_positions[i][3]*2*np.pi/360
+		yaw = ref_positions[i][4]*2*np.pi/360
 		d = angles(pitch, yaw) # make 3d angle vector
 		d = d/np.linalg.norm(d) # unit vector
 		L = np.asarray([r*np.cos(t),r*np.sin(t),z]) # aimed position, cartesian
@@ -434,7 +434,7 @@ def calibrate(): # run this after enough reference points
 	cyl_position[0] = np.sqrt(P[0]**2 + P[1]**2) # r
 	x = P[0]
 	y = P[1]
-	cyl_position[1] = np.arctan2(y,x) % (2*np.pi) #radians, positive from 
+	cyl_position[1] = np.arctan2(y,x) % (2*np.pi) * 180/np.pi #radians, positive from 
 	cyl_position[2] = P[2]
 	print(P)
 	return P
