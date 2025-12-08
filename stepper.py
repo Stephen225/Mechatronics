@@ -83,10 +83,12 @@ class Stepper:
         elif delta < -180:
             delta += 360
             '''
+        angle = angle%360 - 180
+        current = current%360 - 180
         delta = angle-current
-        if (current*angle < 0) and (abs(delta) < 180):
-            delta += 360 if current < 0 else -360
-            
+        if (angle*current < 0):
+            delta = (delta + 360)%360
+
 
         if delta != 0:
             self.queue.put(("goTo", delta))
