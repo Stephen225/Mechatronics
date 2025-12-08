@@ -76,7 +76,8 @@ class Stepper:
     def goToAngle(self, angle):
         with self.angle.get_lock():
             current = self.angle.value
-
+        current %= 360
+        angle %= 360
         delta = (angle - current) % 360
         if delta > 180:
             delta -= 360
