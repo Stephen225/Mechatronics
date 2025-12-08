@@ -126,11 +126,11 @@ def make_page():
 
         <br><br>
 
-        <!-- JSON fetch -->
-        <div class="row">
-            <button class="btn" onclick="jsonButton()">get them jsons</button>
+        <div>
+            <input id="pitchval" class="inputbox" placeholder="horizontal">
+            <input id="yawval" class="inputbox" placeholder="vertical">
+            <button class="btn" onclick="motorAngles()">angles here</button>
         </div>
-
 
         <br>
 
@@ -139,6 +139,15 @@ def make_page():
             <button class="btn" onclick="send('zero')">zero</button>
         </div>
 
+    </div>
+    
+    <div>
+        <h3>Current Motor Angles:</h3>
+        <ul>
+            <li id="horAngle">{hor.angle.value}</li>
+            <li id="vertAngle">{vert.angle.value}</li>
+
+        </ul>
     </div>
 
     <div style="position:relative; text-align:center; margin-top:50px;">
@@ -162,14 +171,6 @@ def make_page():
             plays-inline
             ">
     </div>
-    <div>
-        <h2>Current Motor Angles:</h2>
-        <ul>
-            <li id="horAngle">{hor.angle.value}</li>
-            <li id="vertAngle">{vert.angle.value}</li>
-
-        </ul>
-    </div>
     <div id="afterJSON" style="position:relative; text-align:center; margin-top:300px;">
         <button class="btn" onclick="send('find')">play peekaboo</button>
         <button class="btn" onclick="send('kill')">kill them all</button>
@@ -189,18 +190,18 @@ def make_page():
             <button class="btn" onclick="sendTo()">go here</button>
         </div>
     </div>
-    <div>
-        <input id="pitchval" class="inputbox" placeholder="horizontal">
-        <input id="yawval" class="inputbox" placeholder="vertical">
-        <button class="btn" onclick="motorAngles()">angles here</button>
+    <!-- JSON fetch -->
+    <div class="row">
+        <button class="btn" onclick="jsonButton()">get them jsons</button>
     </div>
+
 
 </div>
 <audio id="laserSound" src="laser_sound.mp3"></audio>
 
 <script>
     setInterval(updateAngles, 200);
-    
+
     function send(cmd) {{
         fetch("/", {{
             method: "POST",
