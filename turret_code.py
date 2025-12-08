@@ -6,6 +6,7 @@ import requests
 import threading
 import numpy as np
 import time
+import os
 from stepper import Stepper #grab stepper class
 
 #Set up GPIOs
@@ -33,7 +34,7 @@ angle = [0,0] #pitch/yaw
 json_data = [] # to put json in later
 
 ip_string = "192.168.1.254" # defaults to his 
-ip_string = "172.20.10.4" # mine
+ip_string = "172.20.10.5" # mine
 
 # some random stuff
 pos_tol = 3 * np.pi/180 # angular tolerance between us and the next turret over
@@ -263,7 +264,6 @@ def make_page():
 # --- Request Handler ---
 class WebHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        '''
         if self.path != "/" and os.path.isfile(self.path.lstrip("/")):
             filepath = self.path.lstrip("/")
             mime = mimetypes.guess_type(filepath)[0] or "application/octet-stream"
@@ -275,7 +275,6 @@ class WebHandler(BaseHTTPRequestHandler):
             with open(filepath, "rb") as f:
                 self.wfile.write(f.read())
             return
-        '''
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
