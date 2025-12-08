@@ -78,10 +78,13 @@ class Stepper:
             current = self.angle.value
 
         delta = (angle - current) % 360
+        # this bit causes it to full spin
+        '''
         if delta > 180:
             delta -= 360
         elif delta < -180:
             delta += 360
+            '''
 
         if delta != 0:
             self.queue.put(("goTo", delta))
