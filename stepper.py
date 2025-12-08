@@ -87,7 +87,7 @@ class Stepper:
         current = current%360 - 180
         delta = angle-current
         if (angle*current < 0):
-            delta = (delta + 360)%360
+            delta += 360 if delta < 0 else -360
 
 
         if delta != 0:
