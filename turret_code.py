@@ -162,6 +162,13 @@ def make_page():
             plays-inline
             ">
     </div>
+    <div>
+        <h2>Current Motor Angles:</h2>
+        <ul>
+            <li>{hor.angle.value}</li>
+            <li>{vert.angle.value}</li>
+        </ul>
+    </div>
     <div id="afterJSON" style="position:relative; text-align:center; margin-top:300px;">
         <button class="btn" onclick="send('find')">play peekaboo</button>
         <button class="btn" onclick="send('kill')">kill them all</button>
@@ -181,11 +188,10 @@ def make_page():
             <button class="btn" onclick="sendTo()">go here</button>
         </div>
     </div>
-    <div class="box">
-        <input id="rval2" class="inputbox" placeholder="r">
-        <input id="tval2" class="inputbox" placeholder="theta">
-        <input id="zval2" class="inputbox" placeholder="z">
-        <button class="btn" onclick="sendTo()">go here</button>
+    <div>
+        <input id="pitchval" class="inputbox" placeholder="horizontal">
+        <input id="yawval" class="inputbox" placeholder="vertical">
+        <button class="btn" onclick="motorAngles()">angles here</button>
     </div>
 
 </div>
@@ -247,14 +253,25 @@ def make_page():
     }}
 
     function sendTo() {{
-        let r = document.getElementById("rval2").value;
-        let t = document.getElementById("tval2").value;
-        let z = document.getElementById("zval2").value;
+        let r = document.getElementById("rval").value;
+        let t = document.getElementById("tval").value;
+        let z = document.getElementById("zval").value;
 
         fetch("/", {{
             method: "POST",
             headers: {{ "Content-Type": "application/x-www-form-urlencoded" }},
             body: "goTo=1&r=" + r + "&t=" + t + "&z=" + z
+        }});
+    }}
+
+    function motorAngles() {{
+        let pitch = document.getElementById("pitchval").value;
+        let yaw = document.getElementById("yawval").value;
+
+        fetch("/", {{
+            method: "POST",
+            headers: {{ "Content-Type": "application/x-www-form-urlencoded" }},
+            body: "motorAngles=1&pitch=" + pitch + "&yaw=" + yaw
         }});
     }}
 </script>
@@ -347,6 +364,10 @@ class WebHandler(BaseHTTPRequestHandler):
                 hor.goToAngle(pos[0])
                 vert.goToAngle(pos[1])
                 #aim_at(pos[0],pos[1],pos[2]) # point at
+            if "motorAngles" in data and "pitch" in data and "yaw" in data:
+                #straight motor angles
+                hor.goToAngle(float(data["pitch"][0]))
+                vert.goToAngle(float(data["yaw"][0]))
 
         except:
             pass
