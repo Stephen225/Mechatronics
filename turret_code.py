@@ -7,6 +7,7 @@ import threading
 import numpy as np
 import time
 import os
+import mimetypes
 from stepper import Stepper #grab stepper class
 
 #Set up GPIOs
