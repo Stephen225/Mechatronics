@@ -143,7 +143,7 @@ def make_page():
 
     <div style="position:relative; text-align:center; margin-top:50px;">
 
-        <button id="laserBtn" class="huge-button" style="padding:20px 40px;" onclick="Laser()">
+        <button id="laserBtn" class="huge-button" style="padding:20px 40px;" onclick="fireLaser()">
             fire the laser
         </button>
 
