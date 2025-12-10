@@ -27,8 +27,8 @@ vert.start_process()
 hor.start_process()
 
 # Positional variables
-position = [154.305,159,6.13] # xyz
-cyl_position = [0,0,0] # r theta z
+cyl_position = [154.305,159,6.13] # xyz
+position = [0,0,0] # r theta z
 ref_positions = [] # place r/t/z/stepper angles into here to math later
 angle = [0,0] #pitch/yaw
 
