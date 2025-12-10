@@ -27,7 +27,7 @@ vert.start_process()
 hor.start_process()
 
 # Positional variables
-position = [0,0,0] # xyz
+position = [154.305,159,6.13] # xyz
 cyl_position = [0,0,0] # r theta z
 ref_positions = [] # place r/t/z/stepper angles into here to math later
 angle = [0,0] #pitch/yaw
@@ -100,10 +100,10 @@ def make_page():
 <div class="box">
     <h3>Arrows</h3>
 
-    <button class="btn" onmousedown="startJog('up')" onmouseup="stopJog()" onmouseleave="stopJog()">▲</button><br>
-    <button class="btn" onmousedown="startJog('left')" onmouseup="stopJog()" onmouseleave="stopJog()">◄</button>
-    <button class="btn" onmousedown="startJog('right')" onmouseup="stopJog()" onmouseleave="stopJog()">►</button><br>
-    <button class="btn" onmousedown="startJog('down')" onmouseup="stopJog()" onmouseleave="stopJog()">▼</button>
+    <button class="btn" onmousedown="startJog('up')" onmouseup="stopJog()" onmouseleave="stopJog()">up</button><br>
+    <button class="btn" onmousedown="startJog('left')" onmouseup="stopJog()" onmouseleave="stopJog()">left</button>
+    <button class="btn" onmousedown="startJog('right')" onmouseup="stopJog()" onmouseleave="stopJog()">right</button><br>
+    <button class="btn" onmousedown="startJog('down')" onmouseup="stopJog()" onmouseleave="stopJog()">down</button>
     
     <br><br>
     
