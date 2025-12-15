@@ -16,9 +16,9 @@ laser_pin = 26 #check this
 GPIO.setup(laser_pin, GPIO.OUT)
 laser_time = 2.5
 
-# Set up steppers
-vert = Stepper()
-hor = Stepper()
+# Set up steppers, with steps/deg input
+vert = Stepper(1024/360) # laser pitch
+hor = Stepper(1024/360) # plate yaw
 
 vert.zero()
 hor.zero()
@@ -61,7 +61,15 @@ def make_page():
 
 <style>
     body {{
-        font-family: Arial;
+        font-family: Impact;
+        margin: 40px;
+        background-image: url("devoe.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }}
+    .stuff{{
+        font-family: Impact;
         margin: 40px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -72,6 +80,9 @@ def make_page():
         padding: 20px;
         border-radius: 15px;
         text-align: center;
+        background-image: url("devoe.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
     }}
     .btn {{
         padding: 10px 15px;
@@ -80,7 +91,15 @@ def make_page():
         border-radius: 8px;
         background:white;
         cursor:pointer;
+        background-image: url("devoe.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
     }}
+    .inputBox{{
+        cursor:text;
+        background-image: url("devoe.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
     #refList, #jsonActions, #calibratedDisplay {{
         display:none;
     }}
@@ -95,7 +114,11 @@ def make_page():
 </head>
 
 <body>
+<header>
+    <h1> ONLY INPUT IN DEGREES </h1>
+</header>
 
+<div class="stuff">
 <!-- Arrows + yaw/pitch input + Zero -->
 <div class="box">
     <h3>Arrows</h3>
@@ -109,8 +132,8 @@ def make_page():
     
     <h4>Yaw / Pitch Input</h4>
     
-    <input id="pitchval" class="inputbox" placeholder="horizontal">
-    <input id="yawval" class="inputbox" placeholder="vertical">
+    <input class="inputBox" id="pitchval" class="inputbox" placeholder="horizontal">
+    <input class="inputBox" id="yawval" class="inputbox" placeholder="vertical">
     <button class="btn" onclick="motorAngles()">angles here</button>
     
     <br><br>
@@ -150,9 +173,9 @@ def make_page():
 <!-- Reference / Go To -->
 <div class="box">
     <h3>Reference / Go Input</h3>
-    <input id="r" placeholder="r">
-    <input id="t" placeholder="theta">
-    <input id="z" placeholder="z"><br>
+    <input class="inputBox" id="r" placeholder="r">
+    <input class="inputBox" id="t" placeholder="theta">
+    <input class="inputBox" id="z" placeholder="z"><br>
     <button class="btn" onclick="doReference()">Reference</button>
     <button class="btn" onclick="sendTo()">Go</button>
 </div>
@@ -171,6 +194,7 @@ def make_page():
         <button class="btn" onclick="send('test')">Test</button>
         <button class="btn" onclick="send('destroy')">Destroy</button>
     </div>
+</div>
 </div>
 
 <audio id="laserSound" src="laser_sound.mp3"></audio>
@@ -377,13 +401,13 @@ class WebHandler(BaseHTTPRequestHandler):
                 print(cmd)
                 # first four are motor jog u/d/l/r
                 if cmd == "up":
-                    jog(vert, jog_amount)
+                    vert.goStep(1)
                 elif cmd == "down":
-                    jog(vert, -jog_amount)
+                    vert.goStep(-1)
                 elif cmd == "right":
-                    jog(hor, -jog_amount)
+                    hor.goStep(-1)
                 elif cmd == "left":
-                    jog(hor, jog_amount)
+                    hor.goStep(1)
                 # then fire
                 elif cmd == "fire":
                     # thread it rah
@@ -486,27 +510,29 @@ def calibrate(): # run this after enough reference points
         pitch = ref_positions[i][4]
         d = angles(pitch, yaw) # make 3d angle vector
         d = d/np.linalg.norm(d) # unit vector
-        L = np.asarray([r*np.cos(t),r*np.sin(t),z]) # aimed position, cartesian
+        L = np.array([r*np.cos(t),r*np.sin(t),z]) # aimed position, cartesian
         M = np.eye(3) - np.outer(d,d) # projection matrix
         A += M
-        b += M.dot(L) 
-    P = np.linalg.pinv(A).dot(b) # pinv does least squares inverse
+        b += M @ L 
+    P = np.linalg.pinv(A) @ b # pinv does least squares inverse
     global cyl_position
     # put in the cylinder coords for checks later
-    cyl_position[0] = np.sqrt(P[0]**2 + P[1]**2) # r
+    cyl_position[0] = (np.sqrt(P[0]**2 + P[1]**2)).item() # r
     x = P[0]
     y = P[1]
-    cyl_position[1] = np.arctan2(y,x) % (2*np.pi) #radians, positive from 
-    cyl_position[2] = P[2]
+    cyl_position[1] = (np.arctan2(y,x) % (2*np.pi)).item() #radians, positive from 
+    cyl_position[2] = P[2].item()
     print(P)
     return P
 
 def angles(pitch, yaw):
     # makes 3d angle vector from pitch and yaw
     # assumes degrees
-    pitch = pitch*2*np.pi/360
-    yaw = yaw*2*np.pi/360
-    return np.array([np.cos(pitch)*np.cos(yaw), np.cos(pitch)*np.sin(yaw), np.sin(yaw)])
+    pitch = np.radians(pitch)
+    yaw = np.radians(yaw)
+    return np.array([np.cos(pitch)*np.cos(yaw),
+                     np.cos(pitch)*np.sin(yaw), 
+                     np.sin(yaw)]).tolist()
 
 def system_zero(): # zeros the motors, run when pointing at origin
     vert.zero()
@@ -514,6 +540,8 @@ def system_zero(): # zeros the motors, run when pointing at origin
     print("zero")
 
 def aim_at(radius, angle, height):
+    '''
+    # this shit wasnt working so i went back to rect math
     # cyl position goes r,theta,z
     # pitch
     # get angle between two rays
@@ -529,6 +557,20 @@ def aim_at(radius, angle, height):
     d3 = np.sqrt(dh**2 + d**2)
     # trig rules to grab angle
     yaw = np.arcsin(dh/d3)
+    '''
+    r0, theta0, z0 = cyl_position
+    #rect coords
+    x = radius*np.cos(np.radians(angle))
+    y = radius*np.sin(np.radians(angle))
+    x0 = r0 * np.cos(theta0)
+    y0 = r0 * np.sin(theta0)
+    # side lengths
+    dx = x - x0
+    dy = y - y0
+    dz = height - z0
+    # triangle math
+    yaw = np.arctan2(dy,dx)*180/np.pi
+    pitch = np.arctan2(dz,np.sqrt(dx**2 + dy**2))*180/np.pi
 
     # go motors go
     print(f"hor going to {pitch}, vert going to {yaw}")
