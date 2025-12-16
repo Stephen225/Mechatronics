@@ -581,9 +581,9 @@ def aim_at(radius, angle, height):
     pitch = np.arctan2(dz,np.sqrt(dx**2 + dy**2))*180/np.pi
 
     # go motors go
-    print(f"hor going to {pitch}, vert going to {yaw}")
-    hor.goToAngle(pitch)
-    vert.goToAngle(yaw)
+    print(f"hor going to {yaw}, vert going to {pitch}")
+    hor.goToAngle(yaw)
+    vert.goToAngle(pitch)
 
 def destroy(json):
     targets = []
