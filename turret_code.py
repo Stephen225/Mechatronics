@@ -17,8 +17,8 @@ GPIO.setup(laser_pin, GPIO.OUT)
 laser_time = 2.5
 
 # Set up steppers, with steps/deg input
-vert = Stepper(1024/360) # laser pitch
-hor = Stepper(1024/360) # plate yaw
+vert = Stepper(1024/360,1) # laser pitch
+hor = Stepper(1024*4/360,-1) # plate yaw
 
 vert.zero()
 hor.zero()
@@ -27,7 +27,7 @@ vert.start_process()
 hor.start_process()
 
 # Positional variables
-cyl_position = [154.305,159,6.13] # xyz
+cyl_position = [1828.8,np.radians(301),31] # xyz
 position = [0,0,0] # r theta z
 ref_positions = [] # place r/t/z/stepper angles into here to math later
 angle = [0,0] #pitch/yaw
@@ -35,11 +35,11 @@ angle = [0,0] #pitch/yaw
 json_data = [] # to put json in later
 
 ip_string = "192.168.1.254" # defaults to his 
-ip_string = "172.20.10.5" # mine
+ip_string = "172.20.10.4" # mine
 
 # some random stuff
 pos_tol = 3 * np.pi/180 # angular tolerance between us and the next turret over
-assumed_height = 5 # turret height for everyone else
+assumed_height = 31 # turret height for everyone else
 us_turret_num = 1 # our turret number, to find our position and also remove from json
 jog_amount = 0.4 #degrees to jog each arrow click
 # one step is ~0.35 degrees, 0.4 should stop itself after one step
@@ -62,6 +62,7 @@ def make_page():
 <style>
     body {{
         font-family: Impact;
+        color: white;
         margin: 40px;
         background-image: url("devoe.jpg");
         background-repeat: no-repeat;
@@ -91,15 +92,19 @@ def make_page():
         border-radius: 8px;
         background:white;
         cursor:pointer;
+        /*
         background-image: url("devoe.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
+        */
     }}
     .inputBox{{
         cursor:text;
+        /*
         background-image: url("devoe.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
+        */
     #refList, #jsonActions, #calibratedDisplay {{
         display:none;
     }}
@@ -115,7 +120,7 @@ def make_page():
 
 <body>
 <header>
-    <h1> ONLY INPUT IN DEGREES </h1>
+    <h1> ONLY INPUT IN DEGREES AND MM </h1>
 </header>
 
 <div class="stuff">
@@ -132,8 +137,8 @@ def make_page():
     
     <h4>Yaw / Pitch Input</h4>
     
-    <input class="inputBox" id="pitchval" class="inputbox" placeholder="horizontal">
-    <input class="inputBox" id="yawval" class="inputbox" placeholder="vertical">
+    <input class="inputBox" id="yawval" class="inputbox" placeholder="horizontal">
+    <input class="inputBox" id="pitchval" class="inputbox" placeholder="vertical">
     <button class="btn" onclick="motorAngles()">angles here</button>
     
     <br><br>
@@ -401,13 +406,13 @@ class WebHandler(BaseHTTPRequestHandler):
                 print(cmd)
                 # first four are motor jog u/d/l/r
                 if cmd == "up":
-                    vert.goStep(1)
-                elif cmd == "down":
                     vert.goStep(-1)
+                elif cmd == "down":
+                    vert.goStep(1)
                 elif cmd == "right":
-                    hor.goStep(-1)
-                elif cmd == "left":
                     hor.goStep(1)
+                elif cmd == "left":
+                    hor.goStep(-1)
                 # then fire
                 elif cmd == "fire":
                     # thread it rah
@@ -450,9 +455,11 @@ class WebHandler(BaseHTTPRequestHandler):
                 aim_at(pos[0],pos[1],pos[2]) # point at
             if "motorAngles" in data and "pitch" in data and "yaw" in data:
                 print("turn damn it")
+                print(float(data["yaw"][0]))
+                print(float(data["pitch"][0]))
                 #straight motor angles
-                hor.goToAngle(float(data["pitch"][0]))
-                vert.goToAngle(float(data["yaw"][0]))
+                hor.goToAngle(float(data["yaw"][0]))
+                vert.goToAngle(float(data["pitch"][0]))
             if "removeRef" in data:
                 idx = int(data["removeRef"][0])
                 if 0 <= idx < len(ref_positions):
