@@ -530,7 +530,7 @@ def calibrate(): # run this after enough reference points
     y = P[1]
     cyl_position[1] = (np.arctan2(y,x) % (2*np.pi)).item() #radians, positive from 
     cyl_position[2] = P[2].item()
-    print(P)
+    print(cyl_position)
     return P
 
 def angles(pitch, yaw):
@@ -540,7 +540,7 @@ def angles(pitch, yaw):
     yaw = np.radians(yaw)
     return np.array([np.cos(pitch)*np.cos(yaw),
                      np.cos(pitch)*np.sin(yaw), 
-                     np.sin(yaw)]).tolist()
+                     np.sin(pitch)]).tolist()
 
 def system_zero(): # zeros the motors, run when pointing at origin
     vert.zero()
