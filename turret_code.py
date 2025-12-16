@@ -28,6 +28,7 @@ hor.start_process()
 
 # Positional variables
 cyl_position = [1828.8,np.radians(301),31] # xyz
+cyl_position = [0,0,31]
 position = [0,0,0] # r theta z
 ref_positions = [] # place r/t/z/stepper angles into here to math later
 angle = [0,0] #pitch/yaw
